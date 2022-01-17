@@ -1,53 +1,69 @@
-import React from "react";
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {FilterValuesType} from './App';
 
-type PropsType = {
-    title?: string
-    title_mid?: string
-    arrForTodolist1: Array<inArray>
-}
-
-type inArray = {
-    id: number,
-    title: string,
+export type TaskType = {
+    id: string
+    title: string
     isDone: boolean
 }
 
-export const ToDoList = (props: PropsType) => {
-    return (
-        <div>
-            <h3>
-                {props.title}
-                {props.title_mid}
-            </h3>
-            <div>
-                <input/>
-                <button>+</button>
-            </div>
-            <ul>
-                {props.arrForTodolist1.map(m=>{
-                    // debugger
-                    return (
-                        <li><input type="checkbox" checked={m.isDone}/>
-                            <span>{m.title}</span></li>
-                    )
-                })}
-
-                {/*<li><input type="checkbox" checked={props.arrForTodolist1[0].isDone}/>*/}
-                {/*    <span>{props.arrForTodolist1[0].title}</span></li>*/}
-                {/*<li><input type="checkbox" checked={props.arrForTodolist1[1].isDone}/>*/}
-                {/*    <span>{props.arrForTodolist1[1].title}</span></li>*/}
-                {/*<li><input type="checkbox" checked={props.arrForTodolist1[2].isDone}/>*/}
-                {/*    <span>{props.arrForTodolist1[2].title}</span></li>*/}
-            </ul>
-            <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
-            </div>
-        </div>)
-
-
+type PropsType = {
+    title: string
+    tasks: Array<TaskType>
+    removeTask: (taskId: string) => void
+    changeFilter: (value: FilterValuesType) => void
+    addTask: (title: string) => void
 }
-//создать createReactApp
-//скопировать сюда src того что мы делали
-//так у вас получится два абсолютно одинаковых проекта (запустите оба)
+
+export function Todolist(props: PropsType) {
+    let [title, setTitle] = useState('')
+
+    let setChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        setTitle(event.currentTarget.value)
+    }
+
+    const onClickHandler = () => {
+        props.addTask(title)
+        setTitle('')
+    }
+
+    const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            onClickHandler()
+        }
+    }
+    const onFilterHandler = (value: FilterValuesType) => {
+        props.changeFilter(value)
+    }
+
+
+    const removeTaskHandler = (tID: string) => {
+        props.removeTask(tID)
+    }
+
+    return <div>
+        <h3>{props.title}</h3>
+        <div>
+            <input value={title} onChange={setChangeHandler} onKeyPress={onKeyPressHandler}/>
+            <button onClick={onClickHandler}>+</button>
+        </div>
+        <ul>
+            {props.tasks.map(t => {
+                return (
+                    <li key={t.id}>
+                        <input type="checkbox" checked={t.isDone}/>
+                        <span>{t.title}</span>
+                        <button onClick={() => {removeTaskHandler(t.id)}}>x</button>
+                    </li>
+                )
+            })
+            }
+        </ul>
+        <div>
+            <button onClick={() => onFilterHandler("all")}>All</button>
+            <button onClick={() => onFilterHandler("active")}>Active</button>
+            <button onClick={() => onFilterHandler("completed")}>Completed</button>
+        </div>
+    </div>
+}
+
