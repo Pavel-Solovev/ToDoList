@@ -23,10 +23,11 @@ export function Todolist(props: PropsType) {
     }
 
     const onClickHandler = () => {
-        props.addTask(title)
+        let titleClean = title.trim()
+        if (titleClean !== '') {
+        props.addTask(titleClean.trim())
         setTitle('')
-    }
-
+    }}
     const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             onClickHandler()
@@ -35,8 +36,6 @@ export function Todolist(props: PropsType) {
     const onFilterHandler = (value: FilterValuesType) => {
         props.changeFilter(value)
     }
-
-
     const removeTaskHandler = (tID: string) => {
         props.removeTask(tID)
     }
