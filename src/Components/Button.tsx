@@ -4,6 +4,7 @@ type ButtonType = {
     name:string
     callBackHandlerForAddTask: () => void
     setTitle: (title:string) => void
+    className?: any
 }
 
 export const Button = (props:ButtonType) => {
@@ -12,6 +13,6 @@ export const Button = (props:ButtonType) => {
         props.setTitle('')
     }
     return (
-        <button onClick={onClickHandler}>{props.name}</button>
+        <button className={props.className} onClick={onClickHandler}>{props.name}</button>
     )
 }
