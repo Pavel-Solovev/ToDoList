@@ -34,24 +34,18 @@ export function Todolist(props: PropsType) {
         setTitle("");}
         else{setError(true)}
     }
-
-
     const onFilterClickHandler = (todoListID: string, value: FilterValuesType) => props.changeFilter(todoListID, value);
-
     const onChangeStatusHandler = (todoListID: string, tID: string, event: boolean) => {
         props.checkBoxFilter(todoListID, tID, event)
     }
-    const onClickHandlerTask = (tID: string) =>
-        props.removeTask(props.todoListID, tID)
-
-    const onClickHandlerTodo = () =>
-        props.removeTodoList(props.todoListID)
+    const onClickHandlerTask = (tID: string) => props.removeTask(props.todoListID, tID)
+    const onClickHandlerTodo = () => props.removeTodoList(props.todoListID)
 
     return <div>
-        <div>
-        <h3>{props.title}</h3>
-        <Button name={'x'} callBackHandlerForAddTask={onClickHandlerTodo}/>
-        </div>
+        <h3>
+            {props.title}
+            <Button name={'x'} callBackHandlerForAddTask={onClickHandlerTodo}/>
+        </h3>
         <div>
             <Input title={title} setTitle={setTitle} callBackHandlerForAddTask={addTask}/>
             <Button name={'+'} callBackHandlerForAddTask={addTask}/>
