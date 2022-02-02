@@ -12,12 +12,14 @@ type TaskType = {
 }
 
 type PropsType = {
+    todoListID: string
     title: string
     tasks: Array<TaskType>
-    removeTask: (taskId: string) => void
-    changeFilter: (value: FilterValuesType) => void
-    addTask: (title: string) => void
-    checkBoxFilter: (id: string,value: boolean) => void
+    removeTask: (todoListID:string, taskId: string) => void
+    changeFilter: (todoListID: string, value: FilterValuesType) => void
+    addTask: (todoListID: string, title: string) => void
+    checkBoxFilter: (todoListID: string, id: string,value: boolean) => void
+    removeTodoList: (todoListID: string) => void
     filter: FilterValuesType
 }
 
@@ -28,49 +30,48 @@ export function Todolist(props: PropsType) {
 
     const addTask = () => {
         if (title.trim() !== '') {
-        props.addTask(title.trim());
+        props.addTask(props.todoListID, title.trim());
         setTitle("");}
         else{setError(true)}
     }
 
 
-    const onFilterClickHandler = (value: FilterValuesType) => props.changeFilter(value);
+    const onFilterClickHandler = (todoListID: string, value: FilterValuesType) => props.changeFilter(todoListID, value);
 
-    const onChangeStatusHandler = (tID: string, event: boolean) => {
-        props.checkBoxFilter(tID, event)
+    const onChangeStatusHandler = (todoListID: string, tID: string, event: boolean) => {
+        props.checkBoxFilter(todoListID, tID, event)
     }
+    const onClickHandlerTask = (tID: string) =>
+        props.removeTask(props.todoListID, tID)
 
-    // const callBackHandlerForAddTask = () => {
-    //     addTask()
-    //     // props.addTask(title)
-    //     // setTitle('')
-    //}
-
-
+    const onClickHandlerTodo = () =>
+        props.removeTodoList(props.todoListID)
 
     return <div>
+        <div>
         <h3>{props.title}</h3>
+        <Button name={'x'} callBackHandlerForAddTask={onClickHandlerTodo}/>
+        </div>
         <div>
             <Input title={title} setTitle={setTitle} callBackHandlerForAddTask={addTask}/>
-            <Button name={'+'} setTitle={setTitle} callBackHandlerForAddTask={addTask}/>
+            <Button name={'+'} callBackHandlerForAddTask={addTask}/>
             {error && <div className={s.errorMessage}>Title is required</div>}
         </div>
         <ul>
             {
                 props.tasks.map(t => {
-                    const onClickHandler = () => props.removeTask(t.id)
                     return <li key={t.id} className={t.isDone ? s.isDoneS : ''}>
-                        <CheckBox onChange={(value)=>onChangeStatusHandler(t.id, value)} checked={t.isDone}/>
+                        <CheckBox onChange={(value)=>onChangeStatusHandler(props.todoListID, t.id, value)} checked={t.isDone}/>
                         <span>{t.title}</span>
-                        <Button name={'x'} callBackHandlerForAddTask={onClickHandler} setTitle={setTitle}/>
+                        <Button name={'x'} callBackHandlerForAddTask={()=>onClickHandlerTask(t.id)}/>
                     </li>
                 })
             }
         </ul>
         <div >
-            <button className={props.filter==='all' ? s.activeFilter : ''} onClick={ () => onFilterClickHandler('all') }>All</button>
-            <button className={props.filter==='active' ? s.activeFilter : ''} onClick={ () => onFilterClickHandler('active') }>Active</button>
-            <button className={props.filter==='completed' ? s.activeFilter : ''} onClick={ () => onFilterClickHandler('completed') }>Completed</button>
+            <Button name={'All'} className={props.filter === 'All' ? s.activeFilter : ''} callBackHandlerForAddTask={() => onFilterClickHandler(props.todoListID, 'All')}/>
+            <Button name={'Active'} className={props.filter === 'Active' ? s.activeFilter : ''} callBackHandlerForAddTask={() => onFilterClickHandler(props.todoListID,'Active')}/>
+            <Button name={'Completed'} className={props.filter === 'Completed' ? s.activeFilter : ''} callBackHandlerForAddTask={() => onFilterClickHandler(props.todoListID,'Completed')}/>
         </div>
     </div>
 }
