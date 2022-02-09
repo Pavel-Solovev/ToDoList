@@ -15,7 +15,6 @@ export const EditableSpan: FC<EditableSpanType> = (
     const [userText, setUserText] = useState<string>("")
     const [editMode, setEditMode] = useState<boolean>(false)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        // setError(false)
         setUserText(e.currentTarget.value)
     }
 

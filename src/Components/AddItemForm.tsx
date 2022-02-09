@@ -4,7 +4,7 @@ import {Button} from "./Button";
 import s from "../ToDoList.module.css";
 
 type AddItemFormType = {
-    addItem: any
+    addItem: (title:string) => void
 }
 
 export const AddItemForm: React.FC<AddItemFormType> = (props) => {
@@ -13,13 +13,13 @@ export const AddItemForm: React.FC<AddItemFormType> = (props) => {
     let [error, setError] = useState(false)
 
     const addItem = () => {
-        setError(false)
-        if (title.trim() !== '') {
-            props.addItem(title.trim());
-            setTitle("");
-        } else {
-            setError(true)
-        }}
+            if (title.trim() !== '') {
+                    props.addItem(title.trim());
+                    setTitle("");
+            } else {
+                    setError(true)
+            }
+    }
 
         return (<div>
 

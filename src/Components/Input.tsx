@@ -8,7 +8,6 @@ type InputType = {
 
 export const Input = ({title, setTitle,...props}: InputType) => {
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        // setError(false)
         setTitle(e.currentTarget.value)
     }
 

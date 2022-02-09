@@ -55,7 +55,7 @@ function App() {
 
     }
     function addTask(todoListID: string, title: string) {
-        let newTask = {id: v1(), title: title, isDone: false};
+        let newTask = {id: v1(), title, isDone: false};
         setTasks({...tasks, [todoListID]: [newTask, ...tasks[todoListID]]})
 
     }
@@ -83,7 +83,7 @@ function App() {
         delete tasks[todoListID]
         setTasks({...tasks})
     }
-    const addTodoList = (title: string) => {
+    const addTodoList = (title:string) => {
         const newTodoListID = v1()
         const newTodoList: TodoListType = {
             id: newTodoListID, title, filter: 'All'
