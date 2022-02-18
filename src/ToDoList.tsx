@@ -1,7 +1,6 @@
 import React from 'react';
 import {FilterValuesType} from './App';
-import s from './ToDoList.module.css'
-import {Button} from "./Components/Button";
+import {UniButton} from "./Components/UniButton";
 import {AddItemForm} from "./Components/AddItemForm";
 import {EditableSpan} from "./Components/EditableSpan";
 import {ComponentMap} from "./Components/ComponentMap";
@@ -36,7 +35,7 @@ export function Todolist(props: PropsType) {
     return <div>
         <h3>
             <EditableSpan title={props.title} changeTitle={(newTitle)=>changeTodoListTitle(newTitle)}/>
-            <Button name={'x'} callBackHandlerForAddTask={onClickHandlerTodo}/>
+            <UniButton name={'x'} callBackHandlerForAddTask={onClickHandlerTodo} classButton={'delete'}/>
         </h3>
         <div>
             <AddItemForm addItem={addTask}/>
@@ -48,9 +47,9 @@ export function Todolist(props: PropsType) {
             checkBoxFilter={props.checkBoxFilter}
             tasks={props.tasks}/>
         <div >
-            <Button name={'All'} className={props.filter === 'All' ? s.activeFilter : ''} callBackHandlerForAddTask={() => onFilterClickHandler('All')}/>
-            <Button name={'Active'} className={props.filter === 'Active' ? s.activeFilter : ''} callBackHandlerForAddTask={() => onFilterClickHandler('Active')}/>
-            <Button name={'Completed'} className={props.filter === 'Completed' ? s.activeFilter : ''} callBackHandlerForAddTask={() => onFilterClickHandler('Completed')}/>
+            <UniButton name={'All'} typeButton={props.filter === 'All' ? "contained" : "outlined"} callBackHandlerForAddTask={() => onFilterClickHandler('All')} classButton={'filter'}/>
+            <UniButton name={'Active'} typeButton={props.filter === 'Active' ? "contained" : "outlined"} callBackHandlerForAddTask={() => onFilterClickHandler('Active')} classButton={'filter'}/>
+            <UniButton name={'Completed'} typeButton={props.filter === 'Completed' ? "contained" : "outlined"} callBackHandlerForAddTask={() => onFilterClickHandler('Completed')} classButton={'filter'}/>
         </div>
     </div>
 }

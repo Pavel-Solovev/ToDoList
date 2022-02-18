@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import {Input} from "./Input";
-import {Button} from "./Button";
+import {UniButton} from "./UniButton";
 import s from "../ToDoList.module.css";
 
 type AddItemFormType = {
-    addItem: (title:string) => void
+    addItem: (title: string) => void
 }
 
 export const AddItemForm: React.FC<AddItemFormType> = (props) => {
@@ -13,20 +13,28 @@ export const AddItemForm: React.FC<AddItemFormType> = (props) => {
     let [error, setError] = useState(false)
 
     const addItem = () => {
-            if (title.trim() !== '') {
-                    props.addItem(title.trim());
-                    setTitle("");
-            } else {
-                    setError(true)
-            }
+        if (title.trim() !== '') {
+            props.addItem(title.trim());
+            setTitle("");
+            setError(false)
+        } else {
+            setError(true)
+        }
     }
-
         return (<div>
-
-                <Input title={title} setTitle={setTitle} callBackHandlerForAddTask={addItem}/>
-                <Button name={'+'} callBackHandlerForAddTask={addItem}/>
-                {error && <div className={s.errorMessage}>Title is required</div>
-                }</div>
+                <Input
+                    error={error}
+                    id={"standard-error-helper-text"}
+                    label={error ? 'Error' : 'Required'}
+                    helperText={error ? 'Title is required' : 'Input title'}
+                    title={title}
+                    setError={setError}
+                    setTitle={setTitle}
+                    callBackHandlerForAddTask={addItem}/>
+                <UniButton name={'+'} callBackHandlerForAddTask={addItem}/>
+                </div>
         )
+
+
 
 }

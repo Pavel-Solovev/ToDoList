@@ -1,8 +1,8 @@
 import React from 'react';
 import s from "../ToDoList.module.css";
-import {CheckBox} from "./CheckBox";
+import {UniCheckBox} from "./UniCheckBox";
 import {EditableSpan} from "./EditableSpan";
-import {Button} from "./Button";
+import {UniButton} from "./UniButton";
 import {TaskType} from "../App";
 
 type ComponentMapType = {
@@ -27,9 +27,9 @@ export const ComponentMap = (props:ComponentMapType) => {
             {
                 tasks.map(t => {
                     return <li key={t.id} className={t.isDone ? s.isDoneS : ''}>
-                        <CheckBox onChange={(value)=>onChangeStatusHandler(todoListID, t.id, value)} checked={t.isDone}/>
+                        <UniCheckBox onChange={(value)=>onChangeStatusHandler(todoListID, t.id, value)} checked={t.isDone}/>
                         <EditableSpan title={t.title} changeTitle={(newTitle)=>changeTitle(todoListID, t.id, newTitle)}/>
-                        <Button name={'x'} callBackHandlerForAddTask={()=>onClickHandlerTask(t.id)}/>
+                        <UniButton name={'x'} callBackHandlerForAddTask={()=>onClickHandlerTask(t.id)} classButton={'delete'}/>
                     </li>
                 })
             }
