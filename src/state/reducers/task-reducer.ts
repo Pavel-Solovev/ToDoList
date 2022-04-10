@@ -1,7 +1,7 @@
 import {TaskStateType, TodoListType} from "../../App";
 import {v1} from "uuid";
 
-export const taskReducer = (state: TaskStateType, action: taskReducerACtype) => {
+export const taskReducer = (state: TaskStateType, action: taskReducerACtype): TaskStateType => {
     switch (action.type) {
         case "ADD-TASK": {
             return {...state,

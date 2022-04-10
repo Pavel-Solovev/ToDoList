@@ -2,7 +2,7 @@ import {TaskStateType} from "../../App";
 
 
 
-export const TasksReducer=(state:Array<TaskStateType>, action:ActionsTasksType)=>{
+export const TasksReducer=(state:Array<TaskStateType>, action:ActionsTasksType): Array<TaskStateType>=>{
     switch (action.type){
         case "REMOVE-TASKS":{
             console.log("REMOVE-TASKS")
