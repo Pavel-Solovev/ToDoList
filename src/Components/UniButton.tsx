@@ -18,8 +18,8 @@ export const UniButton = (props: ButtonType) => {
     if (props.classButton==='delete') {
         return (<>
                 {/*<button className={props.className} onClick={onClickHandler}>{props.name}</button>*/}
-                <IconButton aria-label="delete" size="small">
-                    <Delete onClick={onClickHandler} fontSize="small" />
+                <IconButton onClick={onClickHandler} aria-label="delete" size="small">
+                    <Delete fontSize="small" />
                 </IconButton>
             </>
         )
