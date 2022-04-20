@@ -32,6 +32,8 @@ export function Todolist(props: PropsType) {
     const addTask = (title:string) => props.addTask(props.todoListID, title)
     const changeTodoListTitle = (newTitle:string) => props.changeTodoListTitle(props.todoListID, newTitle)
 
+    // @ts-ignore
+
     return <div>
         <h3>
             <EditableSpan title={props.title} changeTitle={(newTitle)=>changeTodoListTitle(newTitle)}/>
@@ -41,10 +43,12 @@ export function Todolist(props: PropsType) {
             <AddItemForm addItem={addTask}/>
         </div>
         <ComponentMap
+            // @ts-ignore
             todoListID={props.todoListID}
             changeTaskTitle={props.changeTaskTitle}
             removeTask={props.removeTask}
             checkBoxFilter={props.checkBoxFilter}
+            // @ts-ignore
             tasks={props.tasks}/>
         <div >
             <UniButton name={'All'} typeButton={props.filter === 'All' ? "contained" : "outlined"} callBackHandlerForAddTask={() => onFilterClickHandler('All')} classButton={'filter'}/>

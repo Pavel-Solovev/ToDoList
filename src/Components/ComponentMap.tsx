@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import s from "../ToDoList.module.css";
 import {UniCheckBox} from "./UniCheckBox";
 import {EditableSpan} from "./EditableSpan";
@@ -6,41 +6,33 @@ import {UniButton} from "./UniButton";
 import {TaskType} from "../App";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
-import {TaskStateType, TodoListType} from "../AppWithRedux";
+import {FilterValuesType, TaskStateType, TodoListType} from "../AppWithRedux";
 import {changeDoneAC, changeTitleTaskAC, removeTaskAC} from "../state/reducers/task-reducer";
 
 type ComponentMapType = {
     todolist: TodoListType
-    tasks:TaskStateType
+    tasks:TaskType[]
 }
 
-export const ComponentMap = (props: ComponentMapType) => {
+export const ComponentMap = React.memo((props: ComponentMapType) => {
 
     // const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[props.todolist.id])
-
-    let tasksForTodolist = props.tasks[props.todolist.id];
-    if (props.todolist.filter === "Active") {
-        tasksForTodolist = tasksForTodolist.filter(tl => !tl.isDone);
-    }
-    if (props.todolist.filter === "Completed") {
-        tasksForTodolist = tasksForTodolist.filter(tl => tl.isDone);
-    }
 
     const dispatch = useDispatch()
 
     // const{todoListID, tasks, removeTask, checkBoxFilter, changeTaskTitle} = props
 
-    const onChangeStatusHandler = (todoListID: string, tID: string, event: boolean) => {
+    const onChangeStatusHandler = useCallback((todoListID: string, tID: string, event: boolean) => {
         dispatch(changeDoneAC(todoListID, tID, event))
-    }
-    const onClickHandlerTask = (tID: string) =>
-        dispatch(removeTaskAC(props.todolist.id, tID))
-    const changeTitle = (todoListID: string, tID: string, newTitle: string) =>
-        dispatch(changeTitleTaskAC(todoListID, tID, newTitle))
+    }, [dispatch])
+    const onClickHandlerTask = useCallback((tID: string) =>
+        dispatch(removeTaskAC(props.todolist.id, tID)), [dispatch])
+    const changeTitle = useCallback((todoListID: string, tID: string, newTitle: string) =>
+        dispatch(changeTitleTaskAC(todoListID, tID, newTitle)), [dispatch])
     return (
         <ul>
             {
-                tasksForTodolist.map(t => {
+                props.tasks.map(t => {
                     return <li key={t.id} className={t.isDone ? s.isDoneS : ''}>
                         <UniCheckBox onChange={(event) => onChangeStatusHandler(props.todolist.id, t.id, event)}
                                      checked={t.isDone}/>
@@ -53,5 +45,5 @@ export const ComponentMap = (props: ComponentMapType) => {
             }
         </ul>
     );
-};
+});
 

@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent} from 'react'
+import React, {ChangeEvent, KeyboardEvent, useCallback} from 'react'
 import {TextField} from "@material-ui/core";
 
 type InputType = {
@@ -12,20 +12,20 @@ type InputType = {
     callBackHandlerForAddTask: () => void
 }
 
-export const Input = ({title, setTitle,setError,...props}: InputType) => {
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+export const Input = React.memo(({title, setTitle,setError,...props}: InputType) => {
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
         if (setError) {
             setError(false)
         }
-    }
+    }, [setTitle, setError, title])
 
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-     if (e.key === 'Enter') {
-         props.callBackHandlerForAddTask();
-         setTitle('')
+    const onKeyPressHandler = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            props.callBackHandlerForAddTask();
+            setTitle('')
         }
-     }
+    }, [setTitle, title])
         return (
             <TextField
                 error={props.error}
@@ -39,4 +39,4 @@ export const Input = ({title, setTitle,setError,...props}: InputType) => {
             />
         )
 
-}
+})

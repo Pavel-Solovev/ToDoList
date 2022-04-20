@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import {Button, IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
 
@@ -11,10 +11,10 @@ type ButtonType = {
     classButton?: string
 }
 
-export const UniButton = (props: ButtonType) => {
-    const onClickHandler = () => {
+export const UniButton = React.memo((props: ButtonType) => {
+    const onClickHandler = useCallback(() => {
         props.callBackHandlerForAddTask()
-    }
+    }, [props.callBackHandlerForAddTask, props.typeButton, props.name])
     if (props.classButton==='delete') {
         return (<>
                 {/*<button className={props.className} onClick={onClickHandler}>{props.name}</button>*/}
@@ -47,4 +47,4 @@ export const UniButton = (props: ButtonType) => {
             </>
         )
     }
-}
+})

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import {Input} from "./Input";
 import {UniButton} from "./UniButton";
 import s from "../ToDoList.module.css";
@@ -7,20 +7,20 @@ type AddItemFormType = {
     addItem: (title: string) => void
 }
 
-export const AddItemForm: React.FC<AddItemFormType> = (props) => {
+export const AddItemForm: React.FC<AddItemFormType> = React.memo((props) => {
 
     let [title, setTitle] = useState("")
     let [error, setError] = useState(false)
 
-    const addItem = () => {
+    const addItem = useCallback(() => {
         if (title.trim() !== '') {
             props.addItem(title.trim());
-            setTitle("");
-            setError(false)
+            if (title !== '')setTitle("");
+            if (error) setError(false)
         } else {
-            setError(true)
+            if (!error) setError(true)
         }
-    }
+    }, [title])
         return (<div>
                 <Input
                     error={error}
@@ -37,4 +37,4 @@ export const AddItemForm: React.FC<AddItemFormType> = (props) => {
 
 
 
-}
+})

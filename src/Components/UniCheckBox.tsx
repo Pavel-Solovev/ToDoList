@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, useCallback} from "react";
 import {Checkbox} from "@material-ui/core";
 
 type CheckBoxType = {
@@ -6,15 +6,15 @@ type CheckBoxType = {
     onChange: (value: boolean) => void
 }
 
-export const UniCheckBox = (props: CheckBoxType) => {
+export const UniCheckBox = React.memo((props: CheckBoxType) => {
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         props.onChange(e.currentTarget.checked)
-    }
+    }, [props.onChange])
 
     return (
         // <input type='checkbox' checked={props.checked} onChange={onChangeHandler}/>
         <Checkbox checked={props.checked} onChange={onChangeHandler} color={"secondary"}/>
 
     )
-}
+})

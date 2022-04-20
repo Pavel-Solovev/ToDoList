@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {FilterValuesType} from './App';
 import {UniButton} from "./Components/UniButton";
 import {AddItemForm} from "./Components/AddItemForm";
@@ -21,19 +21,26 @@ type PropsType = {
     tasks:TaskStateType
 }
 
-export function Todolist1(props: PropsType) {
-
+export const Todolist1 = React.memo((props: PropsType) => {
+ console.log('Todolist')
     // const todolist = useSelector<AppRootStateType, TodoListType>(state => state.todolists.filter(todo => todo.id)[0])
     // const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[props.todolist.id])
 
+    let tasksForTodolist = props.tasks[props.todolist.id];
+    if (props.todolist.filter === "Active") {
+        tasksForTodolist = tasksForTodolist.filter(tl => !tl.isDone);
+    }
+    if (props.todolist.filter === "Completed") {
+        tasksForTodolist = tasksForTodolist.filter(tl => tl.isDone);
+    }
 
     const dispatch = useDispatch()
 
-    const onFilterClickHandler = (value: FilterValuesType) => dispatch(changeTodolistFilterAC(props.todolist.id, value));
+    const onFilterClickHandler = useCallback((value: FilterValuesType) => dispatch(changeTodolistFilterAC(props.todolist.id, value)),  [dispatch]);
 
-    const onClickHandlerTodo = () => dispatch(RemoveTodoListAC(props.todolist.id))
-    const addTask = (title:string) => dispatch(addTaskAC(props.todolist.id, title))
-    const changeTodoListTitle = (newTitle:string) => dispatch(changeTodolistTitleAC(props.todolist.id, newTitle))
+    const onClickHandlerTodo = useCallback(() => dispatch(RemoveTodoListAC(props.todolist.id)), [dispatch])
+    const addTask = useCallback((title:string) => dispatch(addTaskAC(props.todolist.id, title)), [dispatch])
+    const changeTodoListTitle = useCallback((newTitle:string) => dispatch(changeTodolistTitleAC(props.todolist.id, newTitle)), [dispatch])
 
     return <div>
         <h3>
@@ -45,7 +52,7 @@ export function Todolist1(props: PropsType) {
         </div>
         <ComponentMap
             todolist={props.todolist}
-            tasks={props.tasks}
+            tasks={tasksForTodolist}
          />
         <div >
             <UniButton name={'All'} typeButton={props.todolist.filter === 'All' ? "contained" : "outlined"} callBackHandlerForAddTask={() => onFilterClickHandler('All')} classButton={'filter'}/>
@@ -53,4 +60,4 @@ export function Todolist1(props: PropsType) {
             <UniButton name={'Completed'} typeButton={props.todolist.filter === 'Completed' ? "contained" : "outlined"} callBackHandlerForAddTask={() => onFilterClickHandler('Completed')} classButton={'filter'}/>
         </div>
     </div>
-}
+})
