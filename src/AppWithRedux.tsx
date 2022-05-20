@@ -8,11 +8,7 @@ import {AddTodolistAC} from "./state/reducers/todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
 import {Todolist1} from "./ToDoList1";
-import axios from "axios";
-
-export default {
-    title:'API'
-}
+import {TodolistApi} from "./api/todolist-api";
 
 export type FilterValuesType = "All" | "Active" | "Completed";
 export type TodoListType = {
@@ -29,24 +25,42 @@ export type TaskStateType = {
     [key: string]: Array<TaskType>
 }
 
-const setting = {
-    withCredentials: true
-}
-
 export function AppWithRedux() {
     const [state, setState] = useState<any>(null)
-    useEffect(()=> {
-        axios.get('https://social-network.samuraijs.com/api/1.1/todo-lists', setting)
+    useEffect(() => {
+        TodolistApi.getTodos()
             .then((response) => {
-                debugger
                 setState(response.data);
+            })
+    }, [])
 
+    useEffect(() => {
+        const title = '1234'
+        TodolistApi.createTodos(title)
+            .then((response) => {
+                setState(response.data)
+            })
+    }, [])
+
+    useEffect(() => {
+        const todolistId = 'e2af2177-f307-4f64-9153-a16245acaee6'
+        TodolistApi.deleteTodos(todolistId)
+            .then((response) => {
+                setState(response.data);
+            })
+    }, [])
+    useEffect(() => {
+        const todolistId = '26257d02-984e-4953-8ccc-6776a14229f0'
+        const title = '4321'
+        TodolistApi.updateTitleTodos(todolistId, title)
+            .then((response) => {
+                setState(response.data);
             })
     }, [])
 
 
     const todoList = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todolists)
-    const tasks = useSelector<AppRootStateType, TaskStateType> (state => state.tasks)
+    const tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks)
 
     const dispatch = useDispatch()
 
@@ -64,29 +78,29 @@ export function AppWithRedux() {
 
                 </Grid>
                 <Grid container spacing={3}>
-                {todoList.map((tl, index) => {
-                    // let tasksForTodolist = tasks[tl.id];
-                    // if (tl.filter === "Active") {
-                    //     tasksForTodolist = tasks[tl.id].filter(tl => !tl.isDone);
-                    // }
-                    // if (tl.filter === "Completed") {
-                    //     tasksForTodolist = tasks[tl.id].filter(tl => tl.isDone);
-                    // }
-                    return <Grid item key={index}>
-                        <Paper style={{padding:'10px'}}>
-                        <Todolist1
-                            key={index}
-                            todolist={tl}
-                            tasks={tasks}
+                    {todoList.map((tl, index) => {
+                        // let tasksForTodolist = tasks[tl.id];
+                        // if (tl.filter === "Active") {
+                        //     tasksForTodolist = tasks[tl.id].filter(tl => !tl.isDone);
+                        // }
+                        // if (tl.filter === "Completed") {
+                        //     tasksForTodolist = tasks[tl.id].filter(tl => tl.isDone);
+                        // }
+                        return <Grid item key={index}>
+                            <Paper style={{padding: '10px'}}>
+                                <Todolist1
+                                    key={index}
+                                    todolist={tl}
+                                    tasks={tasks}
 
-                        />
-                            <div>{JSON.stringify(state)}</div>
+                                />
+                                <div>{JSON.stringify(state)}</div>
 
 
-                        </Paper>
-                    </Grid>
-                })
-                }
+                            </Paper>
+                        </Grid>
+                    })
+                    }
                 </Grid>
             </Container>
         </div>
