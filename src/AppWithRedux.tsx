@@ -38,7 +38,7 @@ export function AppWithRedux() {
         const title = '1234'
         TodolistApi.createTodos(title)
             .then((response) => {
-                setState(response.data)
+                setState(response.data.data.item.addedDate)
             })
     }, [])
 
