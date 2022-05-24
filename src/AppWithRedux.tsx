@@ -26,37 +26,46 @@ export type TaskStateType = {
 }
 
 export function AppWithRedux() {
-    const [state, setState] = useState<any>(null)
-    useEffect(() => {
-        TodolistApi.getTodos()
-            .then((response) => {
-                setState(response.data);
-            })
-    }, [])
+    // const [state, setState] = useState<any>(null)
+    // useEffect(() => {
+    //     TodolistApi.getTodos()
+    //         .then((response) => {
+    //             setState(response.data);
+    //         })
+    // }, [])
+    //
+    // useEffect(() => {
+    //     const title = '1234'
+    //     TodolistApi.createTodos(title)
+    //         .then((response) => {
+    //             setState(response.data.data.item.addedDate)
+    //         })
+    // }, [])
+    //
+    // useEffect(() => {
+    //     const todolistId = 'e2af2177-f307-4f64-9153-a16245acaee6'
+    //     TodolistApi.deleteTodos(todolistId)
+    //         .then((response) => {
+    //             setState(response.data);
+    //         })
+    // }, [])
+    // useEffect(() => {
+    //     const todolistId = '26257d02-984e-4953-8ccc-6776a14229f0'
+    //     const title = '4321'
+    //     TodolistApi.updateTitleTodos(todolistId, title)
+    //         .then((response) => {
+    //             setState(response.data);
+    //         })
+    // }, [])
 
-    useEffect(() => {
-        const title = '1234'
-        TodolistApi.createTodos(title)
-            .then((response) => {
-                setState(response.data.data.item.addedDate)
-            })
-    }, [])
 
-    useEffect(() => {
-        const todolistId = 'e2af2177-f307-4f64-9153-a16245acaee6'
-        TodolistApi.deleteTodos(todolistId)
-            .then((response) => {
-                setState(response.data);
-            })
-    }, [])
-    useEffect(() => {
-        const todolistId = '26257d02-984e-4953-8ccc-6776a14229f0'
-        const title = '4321'
-        TodolistApi.updateTitleTodos(todolistId, title)
-            .then((response) => {
-                setState(response.data);
-            })
-    }, [])
+    // useEffect(()=>{
+    // }, [])
+    // TodolistApi.getTodos()
+    //     .then((res)=>{
+    //         dispatch(setTodosAC(res.data))
+    //
+    //     })
 
 
     const todoList = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todolists)
@@ -94,7 +103,7 @@ export function AppWithRedux() {
                                     tasks={tasks}
 
                                 />
-                                <div>{JSON.stringify(state)}</div>
+                                {/*<div>{JSON.stringify(state)}</div>*/}
 
 
                             </Paper>
