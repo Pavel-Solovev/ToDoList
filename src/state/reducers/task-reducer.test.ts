@@ -1,9 +1,12 @@
-import {TaskStateType} from "../../App";
+
 import {taskReducer, addTaskAC, changeDoneAC, changeTitleTaskAC} from "./task-reducer";
+import {TaskStateType} from "../../AppWithRedux";
 
 
 
-let startState: TaskStateType
+let startState: TaskStateType = {
+
+}
 
 beforeEach(()=>{
     startState = {

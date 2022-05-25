@@ -4,7 +4,7 @@ import {ActionCreator} from "redux";
 
 
 export type FilterValuesType = "All" | "Active" | "Completed";
-const initState: Array<TodolistDomainType> = []
+const initState: TodolistDomainType[] = []
 export type TodolistDomainType = TodolistApiType & {
     filter: FilterValuesType
 }
@@ -24,9 +24,11 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initState, a
         case "CHANGE-TODOLIST-FILTER": {
             return state.map(e => e.id === action.payload.id ? {...e, filter: action.payload.filter} : e)
         }
-        // case 'SET-TODOS' :{
-        //     return state
-        // }
+        case 'SET-TODOS' :{
+            return action.payload.todos.map((tl)=>{
+                return {...tl, filter: 'All'}
+            })
+        }
         default:
             return state
     }
@@ -35,8 +37,8 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initState, a
 type ActionType = RemoveTodolistACType |
     AddTodolistACType |
     changeTodolistTitleACType |
-    changeTodolistFilterACType
-    // setTodosACType
+    changeTodolistFilterACType |
+    setTodosACType
 
 export type RemoveTodolistACType = {
     type: 'REMOVE-TODOLIST'
@@ -91,16 +93,16 @@ export const changeTodolistFilterAC = (id: string, filter: FilterValuesType):cha
         payload: {id, filter}
     } as const
 }
-// type setTodosACType = {
-//     type:string
-//     payload: {
-//         todos: TodoListType[]
-//     }
-// }
-// export const setTodosAC = (todos: TodoListType[]):setTodosACType => {
-//     return {
-//         type: 'SET-TODOS',
-//         payload: {todos}
-//     }
-// }
+export type setTodosACType = {
+    type:'SET-TODOS'
+    payload: {
+        todos: TodolistApiType[]
+    }
+}
+export const setTodosAC = (todos: TodolistApiType[]):setTodosACType => {
+    return {
+        type: 'SET-TODOS',
+        payload: {todos}
+    }
+}
 

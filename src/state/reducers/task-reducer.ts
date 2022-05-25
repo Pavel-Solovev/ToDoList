@@ -1,5 +1,5 @@
 import {v1} from "uuid";
-import {AddTodolistACType, RemoveTodolistACType} from "./todolists-reducer";
+import {AddTodolistACType, RemoveTodolistACType, setTodosACType} from "./todolists-reducer";
 
 const initState: TaskStateType = {}
 export type TaskType = {
@@ -43,12 +43,18 @@ export const taskReducer = (state = initState, action: taskReducerACtype): TaskS
             delete stateCopy[action.payload.id]
             return stateCopy
         }
+        case 'SET-TODOS': {
+            const stateCopy = {...state}
+            action.payload.todos.forEach((tl)=>{
+                stateCopy[tl.id] = []
+            })
+        }
         default:
             return state
     }
 }
 
-type taskReducerACtype = SecondActionType | changeDoneACType | changeTitleTaskACType | RemoveTaskACType | RemoveTodolistACType | AddTodolistACType
+type taskReducerACtype = SecondActionType | changeDoneACType | changeTitleTaskACType | RemoveTaskACType | RemoveTodolistACType | AddTodolistACType | setTodosACType
 
 
 type SecondActionType  = {

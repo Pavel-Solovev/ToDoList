@@ -3,10 +3,10 @@ import s from "../ToDoList.module.css";
 import {UniCheckBox} from "./UniCheckBox";
 import {EditableSpan} from "./EditableSpan";
 import {UniButton} from "./UniButton";
-import {TaskType} from "../App";
+
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
-import {FilterValuesType, TaskStateType, TodoListType} from "../AppWithRedux";
+import {FilterValuesType, TaskStateType, TaskType, TodoListType} from "../AppWithRedux";
 import {changeDoneAC, changeTitleTaskAC, removeTaskAC} from "../state/reducers/task-reducer";
 
 type ComponentMapType = {

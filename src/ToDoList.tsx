@@ -1,9 +1,9 @@
 import React from 'react';
-import {FilterValuesType} from './App';
 import {UniButton} from "./Components/UniButton";
 import {AddItemForm} from "./Components/AddItemForm";
 import {EditableSpan} from "./Components/EditableSpan";
 import {ComponentMap} from "./Components/ComponentMap";
+import {FilterValuesType} from "./AppWithRedux";
 
 type TaskType = {
     id: string
