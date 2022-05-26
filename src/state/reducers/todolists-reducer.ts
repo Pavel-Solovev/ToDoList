@@ -1,5 +1,5 @@
-import {TodolistApiType} from "../../api/todolist-api";
-import {ActionCreator} from "redux";
+import {TodolistApi, TodolistApiType} from "../../api/todolist-api";
+import {ActionCreator, Dispatch} from "redux";
 
 
 
@@ -104,5 +104,14 @@ export const setTodosAC = (todos: TodolistApiType[]):setTodosACType => {
         type: 'SET-TODOS',
         payload: {todos}
     }
+}
+
+// Thunk
+
+export const fetchTodolistThunk = (dispatch: Dispatch): void => {
+    const pr = TodolistApi.getTodos()
+    pr.then((res)=>{
+        dispatch(setTodosAC(res.data))
+    })
 }
 

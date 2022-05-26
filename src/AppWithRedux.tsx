@@ -4,11 +4,11 @@ import {v1} from 'uuid';
 import {AddItemForm} from "./Components/AddItemForm";
 import {ButtonAppBar} from "./Components/AppBar";
 import {Container, Grid, Paper} from "@material-ui/core";
-import {AddTodolistAC, setTodosAC} from "./state/reducers/todolists-reducer";
+import {AddTodolistAC, fetchTodolistThunk} from "./state/reducers/todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
 import {Todolist1} from "./ToDoList1";
-import {TodolistApi} from "./api/todolist-api";
+import {TasksApiType} from "./api/todolist-api";
 
 export type FilterValuesType = "All" | "Active" | "Completed";
 export type TodoListType = {
@@ -16,13 +16,13 @@ export type TodoListType = {
     title: string
     filter: FilterValuesType
 }
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
+// export type TaskType = {
+//     id: string
+//     title: string
+//     isDone: boolean
+// }
 export type TaskStateType = {
-    [key: string]: Array<TaskType>
+    [key: string]: Array<TasksApiType>
 }
 
 export function AppWithRedux() {
@@ -60,19 +60,13 @@ export function AppWithRedux() {
 
 
     useEffect(()=>{
+        dispatch(fetchTodolistThunk)
     }, [])
-    TodolistApi.getTodos()
-        .then((res)=>{
-            dispatch(setTodosAC(res.data))
-        debugger
-        })
 
 
     const todoList = useSelector<AppRootStateType, TodoListType[]>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks)
     const dispatch = useDispatch()
-
-    debugger
 
     const addTodoList = useCallback((title: string) => {
         const newTodoListID = v1()
@@ -89,7 +83,6 @@ export function AppWithRedux() {
                 </Grid>
                 <Grid container spacing={3}>
                     {todoList.map((tl, index) => {
-                        debugger
                         // let tasksForTodolist = tasks[tl.id];
                         // if (tl.filter === "Active") {
                         //     tasksForTodolist = tasks[tl.id].filter(tl => !tl.isDone);

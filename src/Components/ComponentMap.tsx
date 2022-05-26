@@ -6,12 +6,13 @@ import {UniButton} from "./UniButton";
 
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
-import {FilterValuesType, TaskStateType, TaskType, TodoListType} from "../AppWithRedux";
+import {FilterValuesType, TaskStateType, TodoListType} from "../AppWithRedux";
 import {changeDoneAC, changeTitleTaskAC, removeTaskAC} from "../state/reducers/task-reducer";
+import {TasksApiType} from "../api/todolist-api";
 
 type ComponentMapType = {
     todolist: TodoListType
-    tasks:TaskType[]
+    tasks:TasksApiType[]
 }
 
 export const ComponentMap = React.memo((props: ComponentMapType) => {
@@ -33,9 +34,9 @@ export const ComponentMap = React.memo((props: ComponentMapType) => {
         <ul>
             {
                 props.tasks.map(t => {
-                    return <li key={t.id} className={t.isDone ? s.isDoneS : ''}>
+                    return <li key={t.id} className={t.completed ? s.isDoneS : ''}>
                         <UniCheckBox onChange={(event) => onChangeStatusHandler(props.todolist.id, t.id, event)}
-                                     checked={t.isDone}/>
+                                     checked={t.completed}/>
                         <EditableSpan title={t.title}
                                       changeTitle={(newTitle) => changeTitle(props.todolist.id, t.id, newTitle)}/>
                         <UniButton name={'x'} callBackHandlerForAddTask={() => onClickHandlerTask(t.id)}

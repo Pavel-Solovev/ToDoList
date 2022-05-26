@@ -17,13 +17,12 @@ export const Todolist1 = React.memo((props: PropsType) => {
     console.log('Todolist')
     // const todolist = useSelector<AppRootStateType, TodoListType>(state => state.todolists.filter(todo => todo.id)[0])
     // const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[props.todolist.id])
-    debugger
     let tasksForTodolist = props.tasks[props.todolist.id];
     if (props.todolist.filter === "Active") {
-        tasksForTodolist = tasksForTodolist.filter(tl => !tl.isDone);
+        tasksForTodolist = tasksForTodolist.filter(tl => !tl.completed);
     }
     if (props.todolist.filter === "Completed") {
-        tasksForTodolist = tasksForTodolist.filter(tl => tl.isDone);
+        tasksForTodolist = tasksForTodolist.filter(tl => tl.completed);
     }
 
     const dispatch = useDispatch()

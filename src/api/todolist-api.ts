@@ -20,6 +20,9 @@ export const TodolistApi = {
     },
     updateTitleTodos: (todolistId: string, title: string) => {
         return instance.put<any, AxiosResponse<CommonResponseType<{ item: TodolistApiType }>>, { title: string }>(`todo-lists/${todolistId}`, {title})
+    },
+    getTasks: (todolistId: string) => {
+        return instance.get<CommonResponseType<{ item: TasksApiType[]}>>( `/todo-lists/${todolistId}/tasks`)
     }
 }
 
@@ -28,6 +31,22 @@ export type TodolistApiType = {
     title: string
     addedDate: string
     order: number
+}
+
+type integer = number
+type datetime = string
+export type TasksApiType = {
+    description: string
+    title: string
+    completed: boolean
+    status: integer
+    priority: integer
+    startDate: datetime
+    deadline: datetime
+    id: string
+    todolistId?: string
+    order: integer
+    addedDate: datetime
 }
 
 type CommonResponseType<T = {}> = {
