@@ -4,11 +4,11 @@ import {v1} from 'uuid';
 import {AddItemForm} from "./Components/AddItemForm";
 import {ButtonAppBar} from "./Components/AppBar";
 import {Container, Grid, Paper} from "@material-ui/core";
-import {AddTodolistAC, fetchTodolistThunk} from "./state/reducers/todolists-reducer";
+import {AddTodolistAC, AddTodolistThunkC, fetchTodolistThunkC} from "./state/reducers/todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
 import {Todolist1} from "./ToDoList1";
-import {TasksApiType} from "./api/todolist-api";
+import {TaskType} from "./api/todolist-api";
 
 export type FilterValuesType = "All" | "Active" | "Completed";
 export type TodoListType = {
@@ -22,7 +22,7 @@ export type TodoListType = {
 //     isDone: boolean
 // }
 export type TaskStateType = {
-    [key: string]: Array<TasksApiType>
+    [key: string]: Array<TaskType>
 }
 
 export function AppWithRedux() {
@@ -60,7 +60,7 @@ export function AppWithRedux() {
 
 
     useEffect(()=>{
-        dispatch(fetchTodolistThunk)
+        dispatch(fetchTodolistThunkC())
     }, [])
 
 
@@ -69,8 +69,7 @@ export function AppWithRedux() {
     const dispatch = useDispatch()
 
     const addTodoList = useCallback((title: string) => {
-        const newTodoListID = v1()
-        dispatch(AddTodolistAC(newTodoListID, title))
+        dispatch(AddTodolistThunkC(title))
     }, [dispatch])
 
     return (

@@ -22,8 +22,18 @@ export const TodolistApi = {
         return instance.put<any, AxiosResponse<CommonResponseType<{ item: TodolistApiType }>>, { title: string }>(`todo-lists/${todolistId}`, {title})
     },
     getTasks: (todolistId: string) => {
-        return instance.get<CommonResponseType<{ item: TasksApiType[]}>>( `/todo-lists/${todolistId}/tasks`)
+        return instance.get<TasksApiType>( `/todo-lists/${todolistId}/tasks`)
+    },
+    addTask: (todolistId: string, title: string) => {
+        return instance.post<CommonResponseType<{ item: TaskType}>>( `/todo-lists/${todolistId}/tasks`, {title})
+    },
+    deleteTask: (todolistId: string, taskId:string) => {
+        return instance.delete<CommonResponseType<{ item: TasksApiType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+    },
+    updateTask: (todolistId: string, taskId:string, title: string) => {
+        return instance.put<any, AxiosResponse<CommonResponseType<{ item: TasksApiType }>>, { title: string }>(`/todo-lists/${todolistId}/tasks/${taskId}`, {title})
     }
+
 }
 
 export type TodolistApiType = {
@@ -33,9 +43,15 @@ export type TodolistApiType = {
     order: number
 }
 
+export type TasksApiType = {
+    error: string | null
+    totalCount: number
+    items: TaskType[]
+}
+
 type integer = number
 type datetime = string
-export type TasksApiType = {
+export type TaskType = {
     description: string
     title: string
     completed: boolean
@@ -44,7 +60,7 @@ export type TasksApiType = {
     startDate: datetime
     deadline: datetime
     id: string
-    todolistId?: string
+    todolistId: string
     order: integer
     addedDate: datetime
 }

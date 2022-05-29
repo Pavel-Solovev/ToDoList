@@ -1,5 +1,6 @@
 import {TodolistApi, TodolistApiType} from "../../api/todolist-api";
-import {ActionCreator, Dispatch} from "redux";
+import {Dispatch} from "redux";
+import {v1} from "uuid";
 
 
 
@@ -13,10 +14,10 @@ export type TodolistDomainType = TodolistApiType & {
 export const todolistsReducer = (state: Array<TodolistDomainType> = initState, action: ActionType): Array<TodolistDomainType> => {
     switch (action.type) {
         case "REMOVE-TODOLIST": {
-            return state.filter(e => e.id !== action.payload.id)
+            return state.filter(e => e.id !== action.payload.todolistId)
         }
         case "ADD-TODOLIST": {
-            return [...state, {id: action.payload.newTodoListID, title: action.payload.title, filter: "All", addedDate: '', order:0}]
+            return [{id: action.payload.newTodoListId, title: action.payload.title, filter: "All", addedDate: '', order: 0}, ...state]
         }
         case "CHANGE-TODOLIST-TITLE": {
             return state.map(e => e.id === action.payload.id ? {...e, title: action.payload.title} : e)
@@ -43,27 +44,30 @@ type ActionType = RemoveTodolistACType |
 export type RemoveTodolistACType = {
     type: 'REMOVE-TODOLIST'
     payload: {
-        id: string
+        todolistId: string
     }
 }
 // export type RemoveTodolistACType = ActionCreator<typeof RemoveTodoListAC>
-export const RemoveTodoListAC = (todolistId1: string): RemoveTodolistACType => {
+export const RemoveTodoListAC = (todolistId: string): RemoveTodolistACType => {
     return {
         type: 'REMOVE-TODOLIST',
-        payload: {id: todolistId1}
+        payload: {todolistId}
     }
 }
 export type AddTodolistACType = {
     type: 'ADD-TODOLIST'
     payload: {
-        newTodoListID:string
+        newTodoListId:string
         title:string
     }
 }
-export const AddTodolistAC = (newTodoListID: string, title: string):AddTodolistACType => {
+export const AddTodolistAC = (title: string):AddTodolistACType => {
     return {
         type: 'ADD-TODOLIST',
-        payload: {newTodoListID, title}
+        payload: {
+            newTodoListId: v1(),
+            title
+        }
     }
 }
 type changeTodolistTitleACType = {
@@ -71,7 +75,9 @@ type changeTodolistTitleACType = {
     payload: {
         id: string
         title: string
+
     }
+
 }
 export const changeTodolistTitleAC = (id: string, title: string): changeTodolistTitleACType => {
     return {
@@ -108,10 +114,33 @@ export const setTodosAC = (todos: TodolistApiType[]):setTodosACType => {
 
 // Thunk
 
-export const fetchTodolistThunk = (dispatch: Dispatch): void => {
+export const fetchTodolistThunkC = () => (dispatch: Dispatch) => {
     const pr = TodolistApi.getTodos()
     pr.then((res)=>{
         dispatch(setTodosAC(res.data))
     })
+}
+
+export const RemoveTodoListThunkC = (todolistId: string) => (dispatch: Dispatch) => {
+    debugger
+    TodolistApi.deleteTodos(todolistId)
+    .then((res)=>{
+        dispatch(RemoveTodoListAC(todolistId))
+    })
+}
+
+export const AddTodolistThunkC = (title: string) => (dispatch: Dispatch) => {
+    debugger
+    TodolistApi.createTodos(title)
+        .then((res)=>{
+            dispatch(AddTodolistAC(title))
+        })
+}
+
+export const changeTodolistTitleThunkC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
+    TodolistApi.updateTitleTodos(todolistId, title)
+        .then((res)=>{
+            dispatch(changeTodolistTitleAC(todolistId, title))
+        })
 }
 

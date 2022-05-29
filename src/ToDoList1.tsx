@@ -1,12 +1,16 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {UniButton} from "./Components/UniButton";
 import {AddItemForm} from "./Components/AddItemForm";
 import {EditableSpan} from "./Components/EditableSpan";
 import {ComponentMap} from "./Components/ComponentMap";
 import {useDispatch} from "react-redux";
 import {FilterValuesType, TaskStateType, TodoListType} from "./AppWithRedux";
-import {changeTodolistFilterAC, changeTodolistTitleAC, RemoveTodoListAC} from "./state/reducers/todolists-reducer";
-import {addTaskAC} from "./state/reducers/task-reducer";
+import {
+    changeTodolistFilterAC,
+    changeTodolistTitleThunkC,
+    RemoveTodoListThunkC
+} from "./state/reducers/todolists-reducer";
+import {addTaskThunkC, fetchTaskThunkC} from "./state/reducers/task-reducer";
 
 type PropsType = {
     todolist: TodoListType
@@ -14,7 +18,6 @@ type PropsType = {
 }
 
 export const Todolist1 = React.memo((props: PropsType) => {
-    console.log('Todolist')
     // const todolist = useSelector<AppRootStateType, TodoListType>(state => state.todolists.filter(todo => todo.id)[0])
     // const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[props.todolist.id])
     let tasksForTodolist = props.tasks[props.todolist.id];
@@ -26,12 +29,15 @@ export const Todolist1 = React.memo((props: PropsType) => {
     }
 
     const dispatch = useDispatch()
+    useEffect(()=>{
+        dispatch(fetchTaskThunkC(props.todolist.id))
+    },[])
 
     const onFilterClickHandler = useCallback((value: FilterValuesType) => dispatch(changeTodolistFilterAC(props.todolist.id, value)), [dispatch]);
 
-    const onClickHandlerTodo = useCallback(() => dispatch(RemoveTodoListAC(props.todolist.id)), [dispatch])
-    const addTask = useCallback((title: string) => dispatch(addTaskAC(props.todolist.id, title)), [dispatch])
-    const changeTodoListTitle = useCallback((newTitle: string) => dispatch(changeTodolistTitleAC(props.todolist.id, newTitle)), [dispatch])
+    const onClickHandlerTodo = useCallback(() => dispatch(RemoveTodoListThunkC(props.todolist.id)), [dispatch])
+    const addTask = useCallback((title: string) => dispatch(addTaskThunkC(props.todolist.id, title)), [dispatch])
+    const changeTodoListTitle = useCallback((newTitle: string) => dispatch(changeTodolistTitleThunkC(props.todolist.id, newTitle)), [dispatch])
 
     return <div>
         <h3>

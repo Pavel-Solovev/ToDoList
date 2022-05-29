@@ -7,12 +7,18 @@ import {UniButton} from "./UniButton";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
 import {FilterValuesType, TaskStateType, TodoListType} from "../AppWithRedux";
-import {changeDoneAC, changeTitleTaskAC, removeTaskAC} from "../state/reducers/task-reducer";
-import {TasksApiType} from "../api/todolist-api";
+import {
+    changeDoneAC,
+    changeTaskThunkC,
+    changeTitleTaskAC,
+    removeTaskAC,
+    removeTaskThunkC
+} from "../state/reducers/task-reducer";
+import {TaskType} from "../api/todolist-api";
 
 type ComponentMapType = {
     todolist: TodoListType
-    tasks:TasksApiType[]
+    tasks:TaskType[]
 }
 
 export const ComponentMap = React.memo((props: ComponentMapType) => {
@@ -27,9 +33,9 @@ export const ComponentMap = React.memo((props: ComponentMapType) => {
         dispatch(changeDoneAC(todoListID, tID, event))
     }, [dispatch])
     const onClickHandlerTask = useCallback((tID: string) =>
-        dispatch(removeTaskAC(props.todolist.id, tID)), [dispatch])
+        dispatch(removeTaskThunkC(props.todolist.id, tID)), [dispatch])
     const changeTitle = useCallback((todoListID: string, tID: string, newTitle: string) =>
-        dispatch(changeTitleTaskAC(todoListID, tID, newTitle)), [dispatch])
+        dispatch(changeTaskThunkC(todoListID, tID, newTitle)), [dispatch])
     return (
         <ul>
             {
