@@ -1,7 +1,7 @@
 import {v1} from "uuid";
 import {AddTodolistACType, RemoveTodolistACType, setTodosACType} from "./todolists-reducer";
 import {Dispatch} from "redux";
-import {TaskType, TodolistApi} from "../../api/todolist-api";
+import {TaskStatuses, TaskType, TodolistApi} from "../../api/todolist-api";
 import {keys} from "@material-ui/core/styles/createBreakpoints";
 
 const initState: TaskStateType = {}
@@ -218,4 +218,9 @@ export const changeTaskThunkC = (todolistId: string, taskId: string, title: stri
             const action = changeTitleTaskAC(todolistId, taskId, title)
             dispatch(action)
         })
+}
+
+export const changeTaskStatusThunkC = (todolistId: string, taskId: string, status: TaskStatuses) => (dispatch: Dispatch) => {
+    TodolistApi.changeStatusTask(todolistId, taskId, completed)
+        .then()
 }

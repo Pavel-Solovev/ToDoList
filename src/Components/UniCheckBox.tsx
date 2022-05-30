@@ -1,8 +1,9 @@
 import React, {ChangeEvent, useCallback} from "react";
 import {Checkbox} from "@material-ui/core";
+import {TaskStatuses} from "../api/todolist-api";
 
 type CheckBoxType = {
-    checked: boolean
+    checked: boolean | TaskStatuses
     onChange: (value: boolean) => void
 }
 

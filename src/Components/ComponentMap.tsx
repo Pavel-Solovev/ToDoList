@@ -40,9 +40,9 @@ export const ComponentMap = React.memo((props: ComponentMapType) => {
         <ul>
             {
                 props.tasks.map(t => {
-                    return <li key={t.id} className={t.completed ? s.isDoneS : ''}>
+                    return <li key={t.id} className={t.status == 2 ? s.isDoneS : ''}>
                         <UniCheckBox onChange={(event) => onChangeStatusHandler(props.todolist.id, t.id, event)}
-                                     checked={t.completed}/>
+                                     checked={t.status}/>
                         <EditableSpan title={t.title}
                                       changeTitle={(newTitle) => changeTitle(props.todolist.id, t.id, newTitle)}/>
                         <UniButton name={'x'} callBackHandlerForAddTask={() => onClickHandlerTask(t.id)}

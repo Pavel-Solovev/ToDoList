@@ -30,8 +30,11 @@ export const TodolistApi = {
     deleteTask: (todolistId: string, taskId:string) => {
         return instance.delete<CommonResponseType<{ item: TasksApiType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
-    updateTask: (todolistId: string, taskId:string, title: string) => {
-        return instance.put<any, AxiosResponse<CommonResponseType<{ item: TasksApiType }>>, { title: string }>(`/todo-lists/${todolistId}/tasks/${taskId}`, {title})
+    updateTask: (todolistId: string, taskId:string, model: UpdateTaskModelType) => {
+        return instance.put<UpdateTaskModelType, AxiosResponse<CommonResponseType<{ item: TasksApiType }>>, { title: string }>(`/todo-lists/${todolistId}/tasks/${taskId}`, {model})
+    },
+    changeStatusTask: (todolistId: string, taskId:string, completed: boolean) => {
+        return instance.put<any, AxiosResponse<CommonResponseType<{ item: TasksApiType }>>, { completed: boolean }>(`/todo-lists/${todolistId}/tasks/${taskId}`, {completed})
     }
 
 }
@@ -49,20 +52,43 @@ export type TasksApiType = {
     items: TaskType[]
 }
 
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed = 2,
+    Draft = 3
+}
+
+export enum TaskPriorities {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    Later = 4
+}
 type integer = number
 type datetime = string
 export type TaskType = {
     description: string
     title: string
     completed: boolean
-    status: integer
-    priority: integer
+    status: TaskStatuses
+    priority: TaskPriorities
     startDate: datetime
     deadline: datetime
     id: string
     todolistId: string
     order: integer
     addedDate: datetime
+}
+
+export type UpdateTaskModelType = {
+    title:string
+    description:string
+    status:TaskStatuses
+    priority:TaskPriorities
+    startDate:datetime
+    deadline:datetime
 }
 
 type CommonResponseType<T = {}> = {
