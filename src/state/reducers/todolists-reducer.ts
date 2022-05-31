@@ -61,11 +61,11 @@ export type AddTodolistACType = {
         title:string
     }
 }
-export const AddTodolistAC = (title: string):AddTodolistACType => {
+export const AddTodolistAC = (newTodoListId: string, title: string):AddTodolistACType => {
     return {
         type: 'ADD-TODOLIST',
         payload: {
-            newTodoListId: v1(),
+            newTodoListId,
             title
         }
     }
@@ -133,7 +133,7 @@ export const AddTodolistThunkC = (title: string) => (dispatch: Dispatch) => {
     debugger
     TodolistApi.createTodos(title)
         .then((res)=>{
-            dispatch(AddTodolistAC(title))
+            dispatch(AddTodolistAC(res.data.data.item.id, title))
         })
 }
 

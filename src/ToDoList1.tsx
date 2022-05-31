@@ -22,10 +22,10 @@ export const Todolist1 = React.memo((props: PropsType) => {
     // const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[props.todolist.id])
     let tasksForTodolist = props.tasks[props.todolist.id];
     if (props.todolist.filter === "Active") {
-        tasksForTodolist = tasksForTodolist.filter(tl => !tl.completed);
+        tasksForTodolist = tasksForTodolist.filter(tl => !tl.status);
     }
     if (props.todolist.filter === "Completed") {
-        tasksForTodolist = tasksForTodolist.filter(tl => tl.completed);
+        tasksForTodolist = tasksForTodolist.filter(tl => tl.status);
     }
 
     const dispatch = useDispatch()

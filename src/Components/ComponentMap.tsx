@@ -8,13 +8,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
 import {FilterValuesType, TaskStateType, TodoListType} from "../AppWithRedux";
 import {
-    changeDoneAC,
+    changeDoneAC, changeTaskStatusThunkC,
     changeTaskThunkC,
     changeTitleTaskAC,
     removeTaskAC,
     removeTaskThunkC
 } from "../state/reducers/task-reducer";
-import {TaskType} from "../api/todolist-api";
+import {TaskStatuses, TaskType} from "../api/todolist-api";
 
 type ComponentMapType = {
     todolist: TodoListType
@@ -29,8 +29,8 @@ export const ComponentMap = React.memo((props: ComponentMapType) => {
 
     // const{todoListID, tasks, removeTask, checkBoxFilter, changeTaskTitle} = props
 
-    const onChangeStatusHandler = useCallback((todoListID: string, tID: string, event: boolean) => {
-        dispatch(changeDoneAC(todoListID, tID, event))
+    const onChangeStatusHandler = useCallback((todoListID: string, tID: string, event: TaskStatuses) => {
+        dispatch(changeTaskStatusThunkC(todoListID, tID, event))
     }, [dispatch])
     const onClickHandlerTask = useCallback((tID: string) =>
         dispatch(removeTaskThunkC(props.todolist.id, tID)), [dispatch])
@@ -41,7 +41,7 @@ export const ComponentMap = React.memo((props: ComponentMapType) => {
             {
                 props.tasks.map(t => {
                     return <li key={t.id} className={t.status == 2 ? s.isDoneS : ''}>
-                        <UniCheckBox onChange={(event) => onChangeStatusHandler(props.todolist.id, t.id, event)}
+                        <UniCheckBox onChange={(event) => onChangeStatusHandler(props.todolist.id, t.id, event as TaskStatuses)}
                                      checked={t.status}/>
                         <EditableSpan title={t.title}
                                       changeTitle={(newTitle) => changeTitle(props.todolist.id, t.id, newTitle)}/>

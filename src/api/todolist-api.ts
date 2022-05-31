@@ -31,10 +31,10 @@ export const TodolistApi = {
         return instance.delete<CommonResponseType<{ item: TasksApiType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask: (todolistId: string, taskId:string, model: UpdateTaskModelType) => {
-        return instance.put<UpdateTaskModelType, AxiosResponse<CommonResponseType<{ item: TasksApiType }>>, { title: string }>(`/todo-lists/${todolistId}/tasks/${taskId}`, {model})
+        return instance.put<UpdateTaskModelType, AxiosResponse<CommonResponseType<{ item: TasksApiType }>>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
     },
-    changeStatusTask: (todolistId: string, taskId:string, completed: boolean) => {
-        return instance.put<any, AxiosResponse<CommonResponseType<{ item: TasksApiType }>>, { completed: boolean }>(`/todo-lists/${todolistId}/tasks/${taskId}`, {completed})
+    changeStatusTask: (todolistId: string, taskId:string, model: UpdateTaskModelType) => {
+        return instance.put<UpdateTaskModelType, AxiosResponse<CommonResponseType<{ item: TasksApiType }>>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
     }
 
 }

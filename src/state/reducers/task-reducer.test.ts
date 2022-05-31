@@ -40,7 +40,7 @@ beforeEach(()=>{
 
 test('status of specified task should be changed', () => {
 
-    const action = changeDoneAC("todolistId2", '2', false);
+    const action = changeDoneAC("todolistId2", '2', 2);
 
     const endState = taskReducer(startState, action)
 
