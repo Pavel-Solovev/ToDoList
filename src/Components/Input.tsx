@@ -38,5 +38,4 @@ export const Input = React.memo(({title, setTitle,setError,...props}: InputType)
                 onKeyPress={ onKeyPressHandler }
             />
         )
-
 })

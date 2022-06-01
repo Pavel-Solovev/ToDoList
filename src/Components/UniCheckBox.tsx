@@ -24,6 +24,5 @@ export const UniCheckBox = React.memo(({
     return (
         <Checkbox checked={TaskStatuses ? checked == TaskStatuses.Completed : checked as boolean}
                   onChange={TaskStatuses ? onTaskChangeHandler : onRegularChangeHandler} color={"secondary"}/>
-
     )
 })

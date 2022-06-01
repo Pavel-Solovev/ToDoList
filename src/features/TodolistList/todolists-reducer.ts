@@ -1,45 +1,35 @@
 import {TodolistApi, TodolistApiType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
-import {addTaskAC} from "./task-reducer";
 
 
-
-export type FilterValuesType = "All" | "Active" | "Completed";
 const initState: TodolistDomainType[] = []
-export type TodolistDomainType = TodolistApiType & {
-    filter: FilterValuesType
-}
 
 export const todolistsReducer = (state: Array<TodolistDomainType> = initState, action: todoReducerACType): Array<TodolistDomainType> => {
     switch (action.type) {
-        case "REMOVE-TODOLIST": {
+        case "REMOVE-TODOLIST":
             return state.filter(e => e.id !== action.payload.todolistId)
-        }
-        case "ADD-TODOLIST": {
-            return [{id: action.payload.newTodoListId, title: action.payload.title, filter: "All", addedDate: '', order: 0}, ...state]
-        }
-        case "CHANGE-TODOLIST-TITLE": {
+        case "ADD-TODOLIST":
+            return [{
+                id: action.payload.newTodoListId,
+                title: action.payload.title,
+                filter: "All",
+                addedDate: '',
+                order: 0
+            }, ...state]
+        case "CHANGE-TODOLIST-TITLE":
             return state.map(e => e.id === action.payload.id ? {...e, title: action.payload.title} : e)
-        }
-        case "CHANGE-TODOLIST-FILTER": {
+        case "CHANGE-TODOLIST-FILTER":
             return state.map(e => e.id === action.payload.id ? {...e, filter: action.payload.filter} : e)
-        }
-        case 'SET-TODOS' :{
-            return action.payload.todos.map((tl)=>{
+        case 'SET-TODOS' :
+            return action.payload.todos.map((tl) => {
                 return {...tl, filter: 'All'}
             })
-        }
         default:
             return state
     }
 }
 
-type todoReducerACType =
-    | ReturnType<typeof RemoveTodoListAC>
-    | ReturnType<typeof AddTodolistAC>
-    | ReturnType<typeof changeTodolistTitleAC>
-    | ReturnType<typeof changeTodolistFilterAC>
-    | ReturnType<typeof setTodosAC>
+//  Actions
 
 export const RemoveTodoListAC = (todolistId: string) => {
     return {
@@ -91,33 +81,45 @@ export const setTodosAC = (todos: TodolistApiType[]) => {
 
 // Thunk
 
-export const fetchTodolistThunkC = () => (dispatch: Dispatch) => {
-    const pr = TodolistApi.getTodos()
-    pr.then((res)=>{
-        dispatch(setTodosAC(res.data))
-    })
+export const fetchTodolistThunkC = () => (dispatch: Dispatch<todoReducerACType>) => {
+    TodolistApi.getTodos()
+        .then((res) => {
+            dispatch(setTodosAC(res.data))
+        })
 }
 
-export const RemoveTodoListThunkC = (todolistId: string) => (dispatch: Dispatch) => {
+export const RemoveTodoListThunkC = (todolistId: string) => (dispatch: Dispatch<todoReducerACType>) => {
     debugger
     TodolistApi.deleteTodos(todolistId)
-    .then((res)=>{
-        dispatch(RemoveTodoListAC(todolistId))
-    })
+        .then(() => {
+            dispatch(RemoveTodoListAC(todolistId))
+        })
 }
 
-export const AddTodolistThunkC = (title: string) => (dispatch: Dispatch) => {
+export const AddTodolistThunkC = (title: string) => (dispatch: Dispatch<todoReducerACType>) => {
     debugger
     TodolistApi.createTodos(title)
-        .then((res)=>{
+        .then((res) => {
             dispatch(AddTodolistAC(res.data.data.item.id, title))
         })
 }
 
-export const changeTodolistTitleThunkC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
+export const changeTodolistTitleThunkC = (todolistId: string, title: string) =>
+    (dispatch: Dispatch<todoReducerACType>) => {
     TodolistApi.updateTitleTodos(todolistId, title)
-        .then((res)=>{
+        .then(() => {
             dispatch(changeTodolistTitleAC(todolistId, title))
         })
 }
+// type
 
+type todoReducerACType =
+    | ReturnType<typeof RemoveTodoListAC>
+    | ReturnType<typeof AddTodolistAC>
+    | ReturnType<typeof changeTodolistTitleAC>
+    | ReturnType<typeof changeTodolistFilterAC>
+    | ReturnType<typeof setTodosAC>
+export type FilterValuesType = "All" | "Active" | "Completed";
+export type TodolistDomainType = TodolistApiType & {
+    filter: FilterValuesType
+}

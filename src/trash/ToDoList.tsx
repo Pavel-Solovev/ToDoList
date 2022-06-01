@@ -1,9 +1,9 @@
 import React from 'react';
-import {UniButton} from "./Components/UniButton";
-import {AddItemForm} from "./Components/AddItemForm";
-import {EditableSpan} from "./Components/EditableSpan";
-import {ComponentMap} from "./Components/ComponentMap";
-import {FilterValuesType} from "./AppWithRedux";
+import {UniButton} from "../Components/UniButton";
+import {AddItemForm} from "../Components/AddItemForm/AddItemForm";
+import {EditableSpan} from "../Components/EditableSpan";
+import {ComponentMapForToDo1} from "../features/TodolistList/CompMapForToDo1/ComponentMapForToDo1";
+import {FilterValuesType} from "../features/TodolistList/todolists-reducer";
 
 type TaskType = {
     id: string
@@ -42,7 +42,7 @@ export function Todolist(props: PropsType) {
         <div>
             <AddItemForm addItem={addTask}/>
         </div>
-        <ComponentMap
+        <ComponentMapForToDo1
             // @ts-ignore
             todoListID={props.todoListID}
             changeTaskTitle={props.changeTaskTitle}

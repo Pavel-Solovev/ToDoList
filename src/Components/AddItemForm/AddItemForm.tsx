@@ -1,7 +1,6 @@
 import React, {useCallback, useState} from "react";
-import {Input} from "./Input";
-import {UniButton} from "./UniButton";
-import s from "../ToDoList.module.css";
+import {Input} from "../Input";
+import {UniButton} from "../UniButton";
 
 type AddItemFormType = {
     addItem: (title: string) => void
@@ -34,7 +33,4 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo((props) => {
                 <UniButton name={'+'} callBackHandlerForAddTask={addItem}/>
                 </div>
         )
-
-
-
 })

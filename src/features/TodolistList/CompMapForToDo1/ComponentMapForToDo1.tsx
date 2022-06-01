@@ -1,34 +1,25 @@
 import React, {useCallback} from 'react';
 import s from "../ToDoList.module.css";
-import {UniCheckBox} from "./UniCheckBox";
-import {EditableSpan} from "./EditableSpan";
-import {UniButton} from "./UniButton";
+import {UniCheckBox} from "../../../Components/UniCheckBox";
+import {EditableSpan} from "../../../Components/EditableSpan";
+import {UniButton} from "../../../Components/UniButton";
 
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../state/store";
-import {FilterValuesType, TaskStateType, TodoListType} from "../AppWithRedux";
+import {useDispatch} from "react-redux";
 import {
-    changeDoneAC, changeTaskStatusThunkC,
+ changeTaskStatusThunkC,
     changeTaskThunkC,
-    changeTitleTaskAC,
-    removeTaskAC,
     removeTaskThunkC
-} from "../state/reducers/task-reducer";
-import {TaskStatuses, TaskType} from "../api/todolist-api";
+} from "../task-reducer";
+import {TaskStatuses, TaskType} from "../../../api/todolist-api";
+import {TodolistDomainType} from "../todolists-reducer";
 
 type ComponentMapType = {
-    todolist: TodoListType
+    todolist: TodolistDomainType
     tasks:TaskType[]
 }
 
-export const ComponentMap = React.memo((props: ComponentMapType) => {
-
-    // const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[props.todolist.id])
-
+export const ComponentMapForToDo1 = React.memo((props: ComponentMapType) => {
     const dispatch = useDispatch()
-
-    // const{todoListID, tasks, removeTask, checkBoxFilter, changeTaskTitle} = props
-
     const onChangeStatusHandler = useCallback((todoListID: string, tID: string, event: TaskStatuses) => {
         dispatch(changeTaskStatusThunkC(todoListID, tID, event))
     }, [dispatch])

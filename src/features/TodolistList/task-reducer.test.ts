@@ -1,6 +1,5 @@
 
-import {taskReducer, addTaskAC, changeDoneAC, changeTitleTaskAC} from "./task-reducer";
-import {TaskStateType} from "../../AppWithRedux";
+import {taskReducer, changeDoneAC, changeTitleTaskAC, TaskStateType} from "./task-reducer";
 
 
 

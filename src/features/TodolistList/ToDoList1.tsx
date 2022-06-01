@@ -1,25 +1,22 @@
 import React, {useCallback, useEffect} from 'react';
-import {UniButton} from "./Components/UniButton";
-import {AddItemForm} from "./Components/AddItemForm";
-import {EditableSpan} from "./Components/EditableSpan";
-import {ComponentMap} from "./Components/ComponentMap";
+import {UniButton} from "../../Components/UniButton";
+import {AddItemForm} from "../../Components/AddItemForm/AddItemForm";
+import {EditableSpan} from "../../Components/EditableSpan";
+import {ComponentMapForToDo1} from "./CompMapForToDo1/ComponentMapForToDo1";
 import {useDispatch} from "react-redux";
-import {FilterValuesType, TaskStateType, TodoListType} from "./AppWithRedux";
 import {
     changeTodolistFilterAC,
-    changeTodolistTitleThunkC,
-    RemoveTodoListThunkC
-} from "./state/reducers/todolists-reducer";
-import {addTaskThunkC, fetchTaskThunkC} from "./state/reducers/task-reducer";
+    changeTodolistTitleThunkC, FilterValuesType,
+    RemoveTodoListThunkC, TodolistDomainType
+} from "./todolists-reducer";
+import {addTaskThunkC, fetchTaskThunkC, TaskStateType} from "./task-reducer";
 
 type PropsType = {
-    todolist: TodoListType
+    todolist: TodolistDomainType
     tasks: TaskStateType
 }
 
 export const Todolist1 = React.memo((props: PropsType) => {
-    // const todolist = useSelector<AppRootStateType, TodoListType>(state => state.todolists.filter(todo => todo.id)[0])
-    // const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[props.todolist.id])
     let tasksForTodolist = props.tasks[props.todolist.id];
     if (props.todolist.filter === "Active") {
         tasksForTodolist = tasksForTodolist.filter(tl => !tl.status);
@@ -47,7 +44,7 @@ export const Todolist1 = React.memo((props: PropsType) => {
         <div>
             <AddItemForm addItem={addTask}/>
         </div>
-        <ComponentMap
+        <ComponentMapForToDo1
             todolist={props.todolist}
             tasks={tasksForTodolist}
         />
