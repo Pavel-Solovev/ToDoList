@@ -2,6 +2,7 @@ import {TodolistApi, TodolistApiType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
 
 
+
 const initState: TodolistDomainType[] = []
 
 export const todolistsReducer = (state: Array<TodolistDomainType> = initState, action: todoReducerACType): Array<TodolistDomainType> => {
