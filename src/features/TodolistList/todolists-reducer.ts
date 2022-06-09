@@ -1,12 +1,12 @@
 import {TodolistApi, TodolistApiType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
 import {AppThunk} from "../../app/store";
-
+import {AppActionType, setAppStatusAC} from "../../app/app-reducer";
 
 
 const initState: TodolistDomainType[] = []
 
-export const todolistsReducer = (state: Array<TodolistDomainType> = initState, action: todoReducerACType): Array<TodolistDomainType> => {
+export const todolistsReducer = (state: Array<TodolistDomainType> = initState, action: todoReducerACType): TodolistDomainType[] => {
     switch (action.type) {
         case "REMOVE-TODOLIST":
             return state.filter(e => e.id !== action.payload.todolistId)
@@ -77,9 +77,11 @@ export const setTodosAC = (todos: TodolistApiType[]) => {
 // Thunk
 
 export const fetchTodolistThunkC = () => (dispatch: Dispatch<todoReducerACType>) => {
+    dispatch(setAppStatusAC('loading'))
     TodolistApi.getTodos()
         .then((res) => {
             dispatch(setTodosAC(res.data))
+            dispatch(setAppStatusAC('succeeded'))
         })
 }
 
@@ -90,10 +92,12 @@ export const fetchTodolistThunkC = () => (dispatch: Dispatch<todoReducerACType>)
 //         })
 // }
 
-export const RemoveTodoListThunkC = (todolistId: string) => (dispatch:Dispatch) => {
+export const RemoveTodoListThunkC = (todolistId: string) => (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC('loading'))
     TodolistApi.deleteTodos(todolistId)
         .then(() => {
             dispatch(RemoveTodoListAC(todolistId))
+            dispatch(setAppStatusAC('succeeded'))
         })
 }
 
@@ -105,19 +109,23 @@ export const RemoveTodoListThunkC = (todolistId: string) => (dispatch:Dispatch) 
 // }
 
 export const AddTodolistThunkC = (title: string) => (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC('loading'))
     TodolistApi.createTodos(title)
         .then((res) => {
             dispatch(AddTodolistAC(res.data.data.item))
+            dispatch(setAppStatusAC('succeeded'))
         })
 }
 
 export const changeTodolistTitleThunkC = (todolistId: string, title: string) =>
     (dispatch: Dispatch<todoReducerACType>) => {
-    TodolistApi.updateTitleTodos(todolistId, title)
-        .then(() => {
-            dispatch(changeTodolistTitleAC(todolistId, title))
-        })
-}
+        dispatch(setAppStatusAC('loading'))
+        TodolistApi.updateTitleTodos(todolistId, title)
+            .then(() => {
+                dispatch(changeTodolistTitleAC(todolistId, title))
+                dispatch(setAppStatusAC('succeeded'))
+            })
+    }
 // type
 
 export type todoReducerACType =
@@ -126,6 +134,7 @@ export type todoReducerACType =
     | ReturnType<typeof changeTodolistTitleAC>
     | ReturnType<typeof changeTodolistFilterAC>
     | ReturnType<typeof setTodosAC>
+    | AppActionType
 export type FilterValuesType = "All" | "Active" | "Completed";
 export type TodolistDomainType = TodolistApiType & {
     filter: FilterValuesType

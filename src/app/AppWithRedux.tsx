@@ -4,20 +4,22 @@ import {AddItemForm} from "../Components/AddItemForm/AddItemForm";
 import {ButtonAppBar} from "../Components/AppBar";
 import {Container, Grid, Paper} from "@material-ui/core";
 import {AddTodolistThunkC, fetchTodolistThunkC, TodolistDomainType} from "../features/TodolistList/todolists-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./store";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "./store";
 import {Todolist1} from "../features/TodolistList/ToDoList1";
 import {TaskStateType} from "../features/TodolistList/task-reducer";
 import {LinearProgress} from "@mui/material";
+import {RequestStatusType} from "./app-reducer";
 
 export function AppWithRedux() {
     useEffect(()=>{
         dispatch(fetchTodolistThunkC())
     }, [])
 
-    const todoList = useSelector<AppRootStateType, TodolistDomainType[]>(state => state.todolists)
-    console.log(todoList, 'Todolist')
-    const tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks)
+    const status = useAppSelector<RequestStatusType>(state => state.app.status)
+    const todoList = useAppSelector<TodolistDomainType[]>(state => state.todolists)
+    const tasks = useAppSelector<TaskStateType>(state => state.tasks)
+
     const dispatch = useDispatch()
 
     const addTodoList = useCallback((title: string) => {
@@ -27,7 +29,7 @@ export function AppWithRedux() {
     return (
         <div>
             <ButtonAppBar/>
-            <LinearProgress color={'secondary'} />
+            {status === 'loading' && <LinearProgress color={'secondary'} />}
             <Container fixed>
                 <Grid container style={{padding: '20px'}}>
                     <AddItemForm addItem={addTodoList}/>

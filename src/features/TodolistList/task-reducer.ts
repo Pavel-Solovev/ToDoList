@@ -6,6 +6,7 @@ import {
 import {Dispatch} from "redux";
 import {TaskStatuses, TaskType, TodolistApi, UpdateTaskModelType} from "../../api/todolist-api";
 import {AppRootStateType} from "../../app/store";
+import {AppActionType, setAppStatusAC} from "../../app/app-reducer";
 
 const initState: TaskStateType = {}
 
@@ -115,26 +116,31 @@ export const setTasksAC = (tasks: TaskType[], todolistId: string) => {
 
 export const fetchTaskThunkC = (todolistId: string) => {
     return (dispatch: Dispatch<taskReducerACType>) => {
-        const pr = TodolistApi.getTasks(todolistId)
-        pr.then((res) => {
-            dispatch(setTasksAC(res.data.items, todolistId))
-        })
+        dispatch(setAppStatusAC('loading'))
+        TodolistApi.getTasks(todolistId)
+            .then((res) => {
+                dispatch(setTasksAC(res.data.items, todolistId))
+                dispatch(setAppStatusAC('succeeded'))
+            })
     }
 }
 
 export const addTaskThunkC = (todolistId: string, title: string) => (dispatch: Dispatch<taskReducerACType>) => {
+    dispatch(setAppStatusAC('loading'))
     TodolistApi.addTask(todolistId, title)
         .then((res) => {
-            console.log(todolistId)
             dispatch(addTaskAC(todolistId, res.data.data.item))
+            dispatch(setAppStatusAC('succeeded'))
         })
 }
 
 export const removeTaskThunkC = (todolistId: string, taskId: string) => (dispatch: Dispatch<taskReducerACType>) => {
+    dispatch(setAppStatusAC('loading'))
     TodolistApi.deleteTask(todolistId, taskId)
         .then((res) => {
             if (res.data.resultCode === 0) {
                 dispatch(removeTaskAC(todolistId, taskId))
+                dispatch(setAppStatusAC('succeeded'))
             }
         })
 }
@@ -152,9 +158,11 @@ export const changeTaskThunkC = (todolistId: string, taskId: string, title: stri
                 priority: currentTask.priority,
                 startDate: currentTask.startDate
             }
+            dispatch(setAppStatusAC('loading'))
             TodolistApi.updateTask(todolistId, taskId, model)
                 .then(() => {
                     dispatch(changeTitleTaskAC(todolistId, taskId, title))
+                    dispatch(setAppStatusAC('succeeded'))
                 })
         }
     }
@@ -174,9 +182,11 @@ export const changeTaskStatusThunkC = (todolistId: string, taskId: string, statu
                 priority: currentTask.priority,
                 startDate: currentTask.startDate
             }
+            dispatch(setAppStatusAC('loading'))
             TodolistApi.changeStatusTask(todolistId, taskId, model)
                 .then(() => {
                     dispatch(changeDoneAC(todolistId, taskId, status))
+                    dispatch(setAppStatusAC('succeeded'))
                 })
         }
     }
@@ -197,3 +207,4 @@ export type taskReducerACType =
     | ReturnType<typeof AddTodolistAC>
     | ReturnType<typeof RemoveTodoListAC>
     | ReturnType<typeof setTodosAC>
+    | AppActionType
