@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
 import {Todolist1} from "../features/TodolistList/ToDoList1";
 import {TaskStateType} from "../features/TodolistList/task-reducer";
+import {LinearProgress} from "@mui/material";
 
 export function AppWithRedux() {
     useEffect(()=>{
@@ -15,6 +16,7 @@ export function AppWithRedux() {
     }, [])
 
     const todoList = useSelector<AppRootStateType, TodolistDomainType[]>(state => state.todolists)
+    console.log(todoList, 'Todolist')
     const tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks)
     const dispatch = useDispatch()
 
@@ -25,6 +27,7 @@ export function AppWithRedux() {
     return (
         <div>
             <ButtonAppBar/>
+            <LinearProgress color={'secondary'} />
             <Container fixed>
                 <Grid container style={{padding: '20px'}}>
                     <AddItemForm addItem={addTodoList}/>

@@ -36,7 +36,7 @@ export const ComponentMapForToDo1 = React.memo((props: ComponentMapType) => {
                                      checked={t.status}/>
                         <EditableSpan title={t.title}
                                       changeTitle={(newTitle) => changeTitle(props.todolist.id, t.id, newTitle)}/>
-                        <UniButton name={'x'} callBackHandlerForAddTask={() => onClickHandlerTask(t.id)}
+                        <UniButton name={'x'} callBackHandler={() => onClickHandlerTask(t.id)}
                                    classButton={'delete'}/>
                     </li>
                 })
