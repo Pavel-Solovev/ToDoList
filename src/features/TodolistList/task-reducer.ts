@@ -40,7 +40,7 @@ export const taskReducer = (state = initState, action: taskReducerACType): TaskS
                     .filter(t => t.id !== action.payload.taskId)
             }
         case "ADD-TODOLIST":
-            return {...state, [action.payload.newTodoListId]: []}
+            return {...state, [action.payload.todolist.id]: []}
         case "REMOVE-TODOLIST": {
             const stateCopy = {...state}
             delete stateCopy[action.payload.todolistId]
@@ -125,6 +125,7 @@ export const fetchTaskThunkC = (todolistId: string) => {
 export const addTaskThunkC = (todolistId: string, title: string) => (dispatch: Dispatch<taskReducerACType>) => {
     TodolistApi.addTask(todolistId, title)
         .then((res) => {
+            console.log(todolistId)
             dispatch(addTaskAC(todolistId, res.data.data.item))
         })
 }
@@ -187,7 +188,7 @@ export type TaskStateType = {
     [key: string]: TaskType[]
 }
 
-type taskReducerACType =
+export type taskReducerACType =
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof changeDoneAC>
     | ReturnType<typeof changeTitleTaskAC>

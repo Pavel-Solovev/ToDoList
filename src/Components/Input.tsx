@@ -18,14 +18,14 @@ export const Input = React.memo(({title, setTitle,setError,...props}: InputType)
         if (setError) {
             setError(false)
         }
-    }, [setTitle, setError, title])
+    }, [setTitle])
 
     const onKeyPressHandler = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             props.callBackHandlerForAddTask();
             setTitle('')
         }
-    }, [setTitle, title])
+    }, [setTitle])
         return (
             <TextField
                 error={props.error}

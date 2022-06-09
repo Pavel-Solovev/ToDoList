@@ -4,7 +4,7 @@ import {Delete} from "@material-ui/icons";
 
 type ButtonType = {
     name: string
-    callBackHandlerForAddTask: () => void
+    callBackHandler: () => void
     className?: string
     typeButton?: "text" | "contained" | "outlined"
     classButton?: string
@@ -12,8 +12,8 @@ type ButtonType = {
 
 export const UniButton = React.memo((props: ButtonType) => {
     const onClickHandler = useCallback(() => {
-        props.callBackHandlerForAddTask()
-    }, [props.callBackHandlerForAddTask, props.typeButton, props.name])
+        props.callBackHandler()
+    }, [props.callBackHandler, props.typeButton, props.name])
     if (props.classButton==='delete') {
         return (<>
                 <IconButton onClick={onClickHandler} aria-label="delete" size="small">

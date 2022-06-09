@@ -11,7 +11,7 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo((props) => {
     let [title, setTitle] = useState("")
     let [error, setError] = useState(false)
 
-    const addItem = useCallback(() => {
+    const addItem = () => {
         if (title.trim() !== '') {
             props.addItem(title.trim());
             if (title !== '')setTitle("");
@@ -19,7 +19,7 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo((props) => {
         } else {
             if (!error) setError(true)
         }
-    }, [title])
+    }
         return (<div>
                 <Input
                     error={error}
@@ -30,7 +30,7 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo((props) => {
                     setError={setError}
                     setTitle={setTitle}
                     callBackHandlerForAddTask={addItem}/>
-                <UniButton name={'+'} callBackHandlerForAddTask={addItem}/>
+                <UniButton name={'+'} callBackHandler={addItem}/>
                 </div>
         )
 })

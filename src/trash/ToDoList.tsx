@@ -37,7 +37,7 @@ export function Todolist(props: PropsType) {
     return <div>
         <h3>
             <EditableSpan title={props.title} changeTitle={(newTitle)=>changeTodoListTitle(newTitle)}/>
-            <UniButton name={'x'} callBackHandlerForAddTask={onClickHandlerTodo} classButton={'delete'}/>
+            <UniButton name={'x'} callBackHandler={onClickHandlerTodo} classButton={'delete'}/>
         </h3>
         <div>
             <AddItemForm addItem={addTask}/>
@@ -51,9 +51,9 @@ export function Todolist(props: PropsType) {
             // @ts-ignore
             tasks={props.tasks}/>
         <div >
-            <UniButton name={'All'} typeButton={props.filter === 'All' ? "contained" : "outlined"} callBackHandlerForAddTask={() => onFilterClickHandler('All')} classButton={'filter'}/>
-            <UniButton name={'Active'} typeButton={props.filter === 'Active' ? "contained" : "outlined"} callBackHandlerForAddTask={() => onFilterClickHandler('Active')} classButton={'filter'}/>
-            <UniButton name={'Completed'} typeButton={props.filter === 'Completed' ? "contained" : "outlined"} callBackHandlerForAddTask={() => onFilterClickHandler('Completed')} classButton={'filter'}/>
+            <UniButton name={'All'} typeButton={props.filter === 'All' ? "contained" : "outlined"} callBackHandler={() => onFilterClickHandler('All')} classButton={'filter'}/>
+            <UniButton name={'Active'} typeButton={props.filter === 'Active' ? "contained" : "outlined"} callBackHandler={() => onFilterClickHandler('Active')} classButton={'filter'}/>
+            <UniButton name={'Completed'} typeButton={props.filter === 'Completed' ? "contained" : "outlined"} callBackHandler={() => onFilterClickHandler('Completed')} classButton={'filter'}/>
         </div>
     </div>
 }
