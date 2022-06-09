@@ -5,6 +5,7 @@ import {EditableSpan} from "../../Components/EditableSpan";
 import {ComponentMapForToDo1} from "./CompMapForToDo1/ComponentMapForToDo1";
 import {useDispatch} from "react-redux";
 import {
+    AddTodolistThunkC,
     changeTodolistFilterAC,
     changeTodolistTitleThunkC, FilterValuesType,
     RemoveTodoListThunkC, TodolistDomainType
@@ -30,16 +31,16 @@ export const Todolist1 = React.memo((props: PropsType) => {
         dispatch(fetchTaskThunkC(props.todolist.id))
     },[])
 
-    const onFilterClickHandler = useCallback((value: FilterValuesType) => dispatch(changeTodolistFilterAC(props.todolist.id, value)), [dispatch]);
+    const onFilterClickHandler = useCallback((todolistId: string, value: FilterValuesType) => dispatch(changeTodolistFilterAC(todolistId, value)), [dispatch]);
 
-    const onClickHandlerTodo = useCallback(() => dispatch(RemoveTodoListThunkC(props.todolist.id)), [dispatch])
-    const addTask = useCallback((title: string) => dispatch(addTaskThunkC(props.todolist.id, title)), [dispatch])
-    const changeTodoListTitle = useCallback((newTitle: string) => dispatch(changeTodolistTitleThunkC(props.todolist.id, newTitle)), [dispatch])
+    const onClickHandlerTodo = useCallback((todolistId: string) => dispatch(RemoveTodoListThunkC(todolistId)), [dispatch])
+    const addTask = useCallback((title: string) => dispatch(addTaskThunkC(props.todolist.id, title)), [dispatch,props.todolist.id])
+    const changeTodoListTitle = useCallback((todolistId: string, newTitle: string) => dispatch(changeTodolistTitleThunkC(todolistId, newTitle)), [dispatch])
 
     return <div>
         <h3>
-            <EditableSpan title={props.todolist.title} changeTitle={(newTitle) => changeTodoListTitle(newTitle)}/>
-            <UniButton name={'x'} callBackHandlerForAddTask={onClickHandlerTodo} classButton={'delete'}/>
+            <EditableSpan title={props.todolist.title} changeTitle={(newTitle) => changeTodoListTitle(props.todolist.id, newTitle)}/>
+            <UniButton name={'x'} callBackHandler={() => onClickHandlerTodo(props.todolist.id, )} classButton={'delete'}/>
         </h3>
         <div>
             <AddItemForm addItem={addTask}/>
@@ -50,11 +51,11 @@ export const Todolist1 = React.memo((props: PropsType) => {
         />
         <div>
             <UniButton name={'All'} typeButton={props.todolist.filter === 'All' ? "contained" : "outlined"}
-                       callBackHandlerForAddTask={() => onFilterClickHandler('All')} classButton={'filter'}/>
+                       callBackHandler={() => onFilterClickHandler(props.todolist.id, 'All')} classButton={'filter'}/>
             <UniButton name={'Active'} typeButton={props.todolist.filter === 'Active' ? "contained" : "outlined"}
-                       callBackHandlerForAddTask={() => onFilterClickHandler('Active')} classButton={'filter'}/>
+                       callBackHandler={() => onFilterClickHandler(props.todolist.id, 'Active')} classButton={'filter'}/>
             <UniButton name={'Completed'} typeButton={props.todolist.filter === 'Completed' ? "contained" : "outlined"}
-                       callBackHandlerForAddTask={() => onFilterClickHandler('Completed')} classButton={'filter'}/>
+                       callBackHandler={() => onFilterClickHandler(props.todolist.id, 'Completed')} classButton={'filter'}/>
         </div>
     </div>
 })
