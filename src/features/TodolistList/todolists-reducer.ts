@@ -1,7 +1,7 @@
 import {TodolistApi, TodolistApiType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
 import {AppThunk} from "../../app/store";
-import {AppActionType, setAppStatusAC} from "../../app/app-reducer";
+import {AppActionType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
 
 
 const initState: TodolistDomainType[] = []
@@ -112,8 +112,18 @@ export const AddTodolistThunkC = (title: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC('loading'))
     TodolistApi.createTodos(title)
         .then((res) => {
-            dispatch(AddTodolistAC(res.data.data.item))
-            dispatch(setAppStatusAC('succeeded'))
+            if (res.data.resultCode === 0) {
+                dispatch(AddTodolistAC(res.data.data.item))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(setAppErrorAC(res.data.messages[0]))
+                } else {
+                    dispatch(setAppErrorAC('Some error occurred'))
+                }
+                dispatch(setAppStatusAC('failed'))
+            }
+
         })
 }
 

@@ -2,14 +2,15 @@ import React, {useCallback, useEffect} from 'react';
 import '../trash/App.css';
 import {AddItemForm} from "../Components/AddItemForm/AddItemForm";
 import {ButtonAppBar} from "../Components/AppBar";
-import {Container, Grid, Paper} from "@material-ui/core";
+import {Container, Grid} from "@material-ui/core";
 import {AddTodolistThunkC, fetchTodolistThunkC, TodolistDomainType} from "../features/TodolistList/todolists-reducer";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "./store";
 import {Todolist1} from "../features/TodolistList/ToDoList1";
 import {TaskStateType} from "../features/TodolistList/task-reducer";
-import {LinearProgress} from "@mui/material";
+import {LinearProgress, Paper} from "@mui/material";
 import {RequestStatusType} from "./app-reducer";
+import {ErrorSnackbar} from "../Components/ErrorSnackbar/ErrorSnackbar";
 
 export function AppWithRedux() {
     useEffect(()=>{
@@ -48,6 +49,7 @@ export function AppWithRedux() {
                     })
                     }
                 </Grid>
+                <ErrorSnackbar/>
             </Container>
         </div>
     );

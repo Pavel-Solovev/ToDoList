@@ -6,7 +6,7 @@ import {
 import {Dispatch} from "redux";
 import {TaskStatuses, TaskType, TodolistApi, UpdateTaskModelType} from "../../api/todolist-api";
 import {AppRootStateType} from "../../app/store";
-import {AppActionType, setAppStatusAC} from "../../app/app-reducer";
+import {AppActionType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
 
 const initState: TaskStateType = {}
 
@@ -129,8 +129,18 @@ export const addTaskThunkC = (todolistId: string, title: string) => (dispatch: D
     dispatch(setAppStatusAC('loading'))
     TodolistApi.addTask(todolistId, title)
         .then((res) => {
-            dispatch(addTaskAC(todolistId, res.data.data.item))
-            dispatch(setAppStatusAC('succeeded'))
+            if (res.data.resultCode === 0) {
+                dispatch(addTaskAC(todolistId, res.data.data.item))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(setAppErrorAC(res.data.messages[0])) //для вывода всех ошибок, можно воспользоваться for each
+                } else {
+                    dispatch(setAppErrorAC('Some error occurred'))
+                }
+                dispatch(setAppStatusAC('failed'))
+            }
+
         })
 }
 
