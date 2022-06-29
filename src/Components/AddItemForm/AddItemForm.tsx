@@ -4,6 +4,7 @@ import {UniButton} from "../UniButton";
 
 type AddItemFormType = {
     addItem: (title: string) => void
+    disabled?: boolean
 }
 
 export const AddItemForm: React.FC<AddItemFormType> = React.memo((props) => {
@@ -29,8 +30,10 @@ export const AddItemForm: React.FC<AddItemFormType> = React.memo((props) => {
                     title={title}
                     setError={setError}
                     setTitle={setTitle}
-                    callBackHandlerForAddTask={addItem}/>
-                <UniButton name={'+'} callBackHandler={addItem}/>
+                    callBackHandlerForAddTask={addItem}
+                    disabled={props.disabled}
+                />
+                <UniButton name={'+'} callBackHandler={addItem} disabled={props.disabled}/>
                 </div>
         )
 })

@@ -31,19 +31,25 @@ export const Todolist1 = React.memo((props: PropsType) => {
         dispatch(fetchTaskThunkC(props.todolist.id))
     },[])
 
-    const onFilterClickHandler = useCallback((todolistId: string, value: FilterValuesType) => dispatch(changeTodolistFilterAC(todolistId, value)), [dispatch]);
+    const onFilterClickHandler = useCallback((todolistId: string, value: FilterValuesType) =>
+        dispatch(changeTodolistFilterAC(todolistId, value)), [dispatch]);
 
-    const onClickHandlerTodo = useCallback((todolistId: string) => dispatch(RemoveTodoListThunkC(todolistId)), [dispatch])
-    const addTask = useCallback((title: string) => dispatch(addTaskThunkC(props.todolist.id, title)), [dispatch,props.todolist.id])
-    const changeTodoListTitle = useCallback((todolistId: string, newTitle: string) => dispatch(changeTodolistTitleThunkC(todolistId, newTitle)), [dispatch])
+    const onClickHandlerTodo = useCallback((todolistId: string) =>
+        dispatch(RemoveTodoListThunkC(todolistId)), [dispatch])
+    const addTask = useCallback((title: string) =>
+        dispatch(addTaskThunkC(props.todolist.id, title)), [dispatch,props.todolist.id])
+    const changeTodoListTitle = useCallback((todolistId: string, newTitle: string) =>
+        dispatch(changeTodolistTitleThunkC(todolistId, newTitle)), [dispatch])
 
     return <div>
         <h3>
-            <EditableSpan title={props.todolist.title} changeTitle={(newTitle) => changeTodoListTitle(props.todolist.id, newTitle)}/>
-            <UniButton name={'x'} callBackHandler={() => onClickHandlerTodo(props.todolist.id, )} classButton={'delete'}/>
+            <EditableSpan title={props.todolist.title}
+                          changeTitle={(newTitle) => changeTodoListTitle(props.todolist.id, newTitle)}/>
+            <UniButton name={'x'} callBackHandler={() => onClickHandlerTodo(props.todolist.id)}
+                       disabled={props.todolist.entityStatus === 'loading'} classButton={'delete'}/>
         </h3>
         <div>
-            <AddItemForm addItem={addTask}/>
+            <AddItemForm addItem={addTask} disabled={props.todolist.entityStatus ==='loading'}/>
         </div>
         <ComponentMapForToDo1
             todolist={props.todolist}

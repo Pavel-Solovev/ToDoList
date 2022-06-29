@@ -1,5 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useCallback} from 'react'
 import {TextField} from "@material-ui/core";
+import {RequestStatusType} from "../app/app-reducer";
 
 type InputType = {
     error?:boolean
@@ -10,6 +11,7 @@ type InputType = {
     title:string
     setTitle: (title:string) => void
     callBackHandlerForAddTask: () => void
+    disabled?: boolean
 }
 
 export const Input = React.memo(({title, setTitle,setError,...props}: InputType) => {
@@ -36,6 +38,7 @@ export const Input = React.memo(({title, setTitle,setError,...props}: InputType)
                 variant="standard"
                 onChange={ onChangeHandler }
                 onKeyPress={ onKeyPressHandler }
+                disabled={props.disabled}
             />
         )
 })

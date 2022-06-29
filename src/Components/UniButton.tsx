@@ -1,6 +1,7 @@
 import React, {useCallback} from 'react'
 import {Button, IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
+import {RequestStatusType} from "../app/app-reducer";
 
 type ButtonType = {
     name: string
@@ -8,6 +9,7 @@ type ButtonType = {
     className?: string
     typeButton?: "text" | "contained" | "outlined"
     classButton?: string
+    disabled?: boolean
 }
 
 export const UniButton = React.memo((props: ButtonType) => {
@@ -16,7 +18,7 @@ export const UniButton = React.memo((props: ButtonType) => {
     }, [props.callBackHandler, props.typeButton, props.name])
     if (props.classButton==='delete') {
         return (<>
-                <IconButton onClick={onClickHandler} aria-label="delete" size="small">
+                <IconButton onClick={onClickHandler} disabled={props.disabled} aria-label="delete" size="small">
                     <Delete fontSize="small" />
                 </IconButton>
             </>
@@ -24,7 +26,8 @@ export const UniButton = React.memo((props: ButtonType) => {
     }
     if (props.classButton==='filter') {
         return (<>
-                <Button variant={props.typeButton} onClick={onClickHandler} style={{
+                <Button variant={props.typeButton} onClick={onClickHandler} disabled={props.disabled}
+                        style={{
                     maxWidth: '100px',
                     maxHeight: '24px',
                     minWidth: '24px',
@@ -34,7 +37,8 @@ export const UniButton = React.memo((props: ButtonType) => {
         )
     } else {
         return (<>
-                <Button variant="outlined" onClick={onClickHandler} style={{
+                <Button variant="outlined" onClick={onClickHandler} disabled={props.disabled}
+                        style={{
                     maxWidth: '24px',
                     maxHeight: '24px',
                     minWidth: '24px',
