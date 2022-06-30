@@ -2,9 +2,11 @@ import {TodolistApi, TodolistApiType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
 import {AppThunk} from "../../app/store";
 import {AppActionType, RequestStatusType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {AxiosError} from "axios";
+import {handleServerAppError, handleServerNetworkError} from "../../helpers/error-helper";
 
 
-const initState: TodolistDomainType[] = []
+export const initState: TodolistDomainType[] = []
 
 export const todolistsReducer = (state: TodolistDomainType[] = initState, action: todoReducerACType): TodolistDomainType[] => {
     switch (action.type) {
@@ -21,7 +23,7 @@ export const todolistsReducer = (state: TodolistDomainType[] = initState, action
                 return {...tl, filter: 'All', entityStatus: 'idle'}
             })
         case "CHANGE-TODO-ENTITY-STATUS":
-            return state.map(e=>e.id === action.payload.id ? {...e, entityStatus: action.payload.entityStatus} : e)
+            return state.map(e => e.id === action.payload.id ? {...e, entityStatus: action.payload.entityStatus} : e)
         default:
             return state
     }
@@ -76,7 +78,7 @@ export const setTodosAC = (todos: TodolistApiType[]) => {
     } as const
 }
 
-export const changeTodoEntityStatusAC = (id: string, entityStatus:RequestStatusType) => {
+export const changeTodoEntityStatusAC = (id: string, entityStatus: RequestStatusType) => {
     return {
         type: 'CHANGE-TODO-ENTITY-STATUS',
         payload: {
@@ -130,14 +132,11 @@ export const AddTodolistThunkC = (title: string) => (dispatch: Dispatch) => {
                 dispatch(AddTodolistAC(res.data.data.item))
                 dispatch(setAppStatusAC('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setAppErrorAC('Some error occurred'))
-                }
-                dispatch(setAppStatusAC('failed'))
+                handleServerAppError(dispatch, res.data)
             }
-
+        })
+        .catch((err: AxiosError) => {
+            handleServerNetworkError(dispatch, err.message)
         })
 }
 

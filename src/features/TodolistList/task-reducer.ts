@@ -7,6 +7,8 @@ import {Dispatch} from "redux";
 import {TaskStatuses, TaskType, TodolistApi, UpdateTaskModelType} from "../../api/todolist-api";
 import {AppRootStateType} from "../../app/store";
 import {AppActionType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {AxiosError} from "axios";
+import {handleServerAppError, handleServerNetworkError} from "../../helpers/error-helper";
 
 const initState: TaskStateType = {}
 
@@ -133,15 +135,19 @@ export const addTaskThunkC = (todolistId: string, title: string) => (dispatch: D
                 dispatch(addTaskAC(todolistId, res.data.data.item))
                 dispatch(setAppStatusAC('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0])) //для вывода всех ошибок, можно воспользоваться for each
-                } else {
-                    dispatch(setAppErrorAC('Some error occurred'))
-                }
-                dispatch(setAppStatusAC('failed'))
+                // if (res.data.messages.length) {
+                //     dispatch(setAppErrorAC(res.data.messages[0])) //для вывода всех ошибок, можно воспользоваться for each
+                // } else {
+                //     dispatch(setAppErrorAC('Some error occurred'))
+                // }
+                // dispatch(setAppStatusAC('failed'))
+                handleServerAppError(dispatch, res.data)
             }
-
         })
+        .catch((err: AxiosError) => {
+            handleServerNetworkError(dispatch, err.message)
+        })
+        // .finally()
 }
 
 export const removeTaskThunkC = (todolistId: string, taskId: string) => (dispatch: Dispatch<taskReducerACType>) => {

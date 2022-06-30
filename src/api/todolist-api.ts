@@ -91,7 +91,7 @@ export type UpdateTaskModelType = {
     deadline:datetime
 }
 
-type CommonResponseType<T = {}> = {
+export type CommonResponseType<T = {}> = {
     data: T
     fieldsErrors: string[]
     messages: string[]
