@@ -1,7 +1,6 @@
 import {TodolistApi, TodolistApiType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
-import {AppThunk} from "../../app/store";
-import {AppActionType, RequestStatusType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {AppActionType, RequestStatusType, setAppStatusAC} from "../../app/app-reducer";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../helpers/error-helper";
 
@@ -97,6 +96,9 @@ export const fetchTodolistThunkC = () => (dispatch: Dispatch<todoReducerACType>)
             dispatch(setTodosAC(res.data))
             dispatch(setAppStatusAC('succeeded'))
         })
+        .catch((err: AxiosError) => {
+            handleServerNetworkError(dispatch, err.message)
+        })
 }
 
 // export const RemoveTodoListThunkC = (todolistId: string): AppThunk => (dispatch) => {
@@ -114,6 +116,9 @@ export const RemoveTodoListThunkC = (todolistId: string) => (dispatch: Dispatch)
             dispatch(RemoveTodoListAC(todolistId))
             dispatch(setAppStatusAC('succeeded'))
             dispatch(changeTodoEntityStatusAC(todolistId, 'succeeded'))
+        })
+        .catch((err: AxiosError) => {
+            handleServerNetworkError(dispatch, err.message)
         })
 }
 
@@ -147,6 +152,9 @@ export const changeTodolistTitleThunkC = (todolistId: string, title: string) =>
             .then(() => {
                 dispatch(changeTodolistTitleAC(todolistId, title))
                 dispatch(setAppStatusAC('succeeded'))
+            })
+            .catch((err: AxiosError) => {
+                handleServerNetworkError(dispatch, err.message)
             })
     }
 // type

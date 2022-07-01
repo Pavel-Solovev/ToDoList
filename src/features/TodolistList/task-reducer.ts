@@ -6,7 +6,7 @@ import {
 import {Dispatch} from "redux";
 import {TaskStatuses, TaskType, TodolistApi, UpdateTaskModelType} from "../../api/todolist-api";
 import {AppRootStateType} from "../../app/store";
-import {AppActionType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {AppActionType, setAppStatusAC} from "../../app/app-reducer";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../helpers/error-helper";
 
@@ -124,6 +124,9 @@ export const fetchTaskThunkC = (todolistId: string) => {
                 dispatch(setTasksAC(res.data.items, todolistId))
                 dispatch(setAppStatusAC('succeeded'))
             })
+            .catch((err: AxiosError) => {
+                handleServerNetworkError(dispatch, err.message)
+            })
     }
 }
 
@@ -147,7 +150,7 @@ export const addTaskThunkC = (todolistId: string, title: string) => (dispatch: D
         .catch((err: AxiosError) => {
             handleServerNetworkError(dispatch, err.message)
         })
-        // .finally()
+        // .finally() // работает всегда после then/catch
 }
 
 export const removeTaskThunkC = (todolistId: string, taskId: string) => (dispatch: Dispatch<taskReducerACType>) => {
@@ -159,12 +162,14 @@ export const removeTaskThunkC = (todolistId: string, taskId: string) => (dispatc
                 dispatch(setAppStatusAC('succeeded'))
             }
         })
+        .catch((err: AxiosError) => {
+            handleServerNetworkError(dispatch, err.message)
+        })
 }
 
 export const changeTaskThunkC = (todolistId: string, taskId: string, title: string) =>
     (dispatch: Dispatch<taskReducerACType>, getState: () => AppRootStateType) => {
-        const allTasks = getState().tasks
-        const currentTask = allTasks[todolistId].find(f => f.id === taskId)
+        const currentTask = getState().tasks[todolistId].find(f => f.id === taskId)
         if (currentTask) {
             const model: UpdateTaskModelType = {
                 status: currentTask.status,
@@ -180,15 +185,15 @@ export const changeTaskThunkC = (todolistId: string, taskId: string, title: stri
                     dispatch(changeTitleTaskAC(todolistId, taskId, title))
                     dispatch(setAppStatusAC('succeeded'))
                 })
+                .catch((err: AxiosError) => {
+                    handleServerNetworkError(dispatch, err.message)
+                })
         }
     }
 
 export const changeTaskStatusThunkC = (todolistId: string, taskId: string, status: TaskStatuses) =>
     (dispatch: Dispatch<taskReducerACType>, getState: () => AppRootStateType) => {
-        const state = getState()
-        const allTasks = state.tasks
-        const tasksForClickedTodo = allTasks[todolistId]
-        const currentTask = tasksForClickedTodo.find(f => f.id === taskId)
+        const currentTask = getState().tasks[todolistId].find(f => f.id === taskId)
         if (currentTask) {
             const model: UpdateTaskModelType = {
                 status,
@@ -203,6 +208,9 @@ export const changeTaskStatusThunkC = (todolistId: string, taskId: string, statu
                 .then(() => {
                     dispatch(changeDoneAC(todolistId, taskId, status))
                     dispatch(setAppStatusAC('succeeded'))
+                })
+                .catch((err: AxiosError) => {
+                    handleServerNetworkError(dispatch, err.message)
                 })
         }
     }
