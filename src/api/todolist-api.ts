@@ -1,4 +1,5 @@
 import axios, {AxiosResponse} from "axios";
+import {Login} from "../features/Login/login";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -38,6 +39,33 @@ export const TodolistApi = {
     }
 
 }
+
+export const authAPI = {
+    login(data: LoginParamsType) {
+        return instance.post<LoginParamsType, AxiosResponse<CommonResponseType<{ userId: number }>>>('/auth/login', data)
+    }
+}
+
+export enum LoginStatuses {
+    ok = 0,
+    invalid = 1,
+    invalidAndCaptcha = 10
+}
+
+export type LoginParamsType = {
+    email:string
+    password:string
+    rememberMe?:boolean
+    captcha?:string
+}
+
+// export type LoginParamsType = {
+//     resultCode: LoginStatuses
+//     message: string[]
+//     data: {
+//         userId: number
+//     }
+// }
 
 export type TodolistApiType = {
     id: string

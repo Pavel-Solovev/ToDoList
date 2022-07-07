@@ -37,8 +37,8 @@ export const setAppErrorAC = (error: string | null) => {
 }
 
 
-type setAppStatusACType = ReturnType<typeof setAppStatusAC>
-type setAppErrorACType = ReturnType<typeof setAppErrorAC>
+export type setAppStatusACType = ReturnType<typeof setAppStatusAC>
+export type setAppErrorACType = ReturnType<typeof setAppErrorAC>
 export type AppActionType =setAppStatusACType
     | setAppErrorACType
 
