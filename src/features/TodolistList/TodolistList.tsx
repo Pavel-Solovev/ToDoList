@@ -1,16 +1,20 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Grid} from "@material-ui/core";
 import {AddItemForm} from "../../Components/AddItemForm/AddItemForm";
 import {Paper} from "@mui/material";
 import {Todolist1} from "./ToDoList1";
 import {useDispatch} from "react-redux";
-import {AddTodolistThunkC, TodolistDomainType} from "./todolists-reducer";
+import {AddTodolistThunkC, fetchTodolistThunkC, TodolistDomainType} from "./todolists-reducer";
 import {TaskStateType} from "./task-reducer";
+import {Navigate} from "react-router-dom";
 
 type PropsType = {
     todolist: TodolistDomainType[]
     tasks: TaskStateType
+    isLoginIn: boolean
 }
+
+
 
 export const TodolistList = (props: PropsType) => {
     const dispatch = useDispatch()
@@ -19,6 +23,14 @@ export const TodolistList = (props: PropsType) => {
         dispatch(AddTodolistThunkC(title))
     }, [dispatch])
 
+    useEffect(() => {
+        if (props.isLoginIn)
+            dispatch(fetchTodolistThunkC())
+    }, [])
+
+    if (!props.isLoginIn) {
+        return <Navigate to={'Login'}/>
+    }
     return (
         <>
             <Grid container style={{padding: '20px'}}>

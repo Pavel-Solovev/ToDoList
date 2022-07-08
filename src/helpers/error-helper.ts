@@ -8,6 +8,7 @@ export const handleServerNetworkError = (dispatch: Dispatch<AppActionType>, mess
 }
 
 export const handleServerAppError = <T>(dispatch: Dispatch<AppActionType>, data: CommonResponseType<T>) => {
+    debugger
     if (data.messages.length) {
         dispatch(setAppErrorAC(data.messages[0]))
     } else {

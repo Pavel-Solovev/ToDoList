@@ -5,7 +5,6 @@ import {EditableSpan} from "../../Components/EditableSpan";
 import {ComponentMapForToDo1} from "./CompMapForToDo1/ComponentMapForToDo1";
 import {useDispatch} from "react-redux";
 import {
-    AddTodolistThunkC,
     changeTodolistFilterAC,
     changeTodolistTitleThunkC, FilterValuesType,
     RemoveTodoListThunkC, TodolistDomainType

@@ -14,15 +14,12 @@ import {Login} from "../features/Login/login";
 import {TodolistList} from "../features/TodolistList/TodolistList";
 
 export function AppWithRedux() {
-    useEffect(() => {
-        dispatch(fetchTodolistThunkC())
-    }, [])
-
-    const dispatch = useDispatch()
 
     const status = useAppSelector<RequestStatusType>(state => state.app.status)
+    const isLoginIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
     const todoList = useAppSelector<TodolistDomainType[]>(state => state.todolists)
     const tasks = useAppSelector<TaskStateType>(state => state.tasks)
+
 
     return (
         <div>
@@ -32,7 +29,7 @@ export function AppWithRedux() {
             <Container fixed>
 
                 <Routes>
-                    <Route path='/' element={<TodolistList todolist={todoList} tasks={tasks}/>}/>
+                    <Route path='/' element={<TodolistList todolist={todoList} tasks={tasks} isLoginIn={isLoginIn}/>}/>
                     <Route path='Login' element={<Login/>}/>
                     <Route path='404' element={<main style={{ padding: '1rem'}}>
                         <p>There's nothing here!</p>
