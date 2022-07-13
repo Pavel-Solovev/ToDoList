@@ -3,12 +3,12 @@ import '../trash/App.css';
 import {ButtonAppBar} from "../Components/AppBar";
 import {Container} from "@material-ui/core";
 import {Route, Routes, Navigate} from 'react-router-dom';
-import {fetchTodolistThunkC, TodolistDomainType} from "../features/TodolistList/todolists-reducer";
+import {TodolistDomainType} from "../features/TodolistList/todolists-reducer";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "./store";
 import {TaskStateType} from "../features/TodolistList/task-reducer";
-import {LinearProgress} from "@mui/material";
-import {RequestStatusType} from "./app-reducer";
+import {CircularProgress, LinearProgress} from "@mui/material";
+import {initializeAppTC, RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../Components/ErrorSnackbar/ErrorSnackbar";
 import {Login} from "../features/Login/login";
 import {TodolistList} from "../features/TodolistList/TodolistList";
@@ -16,9 +16,21 @@ import {TodolistList} from "../features/TodolistList/TodolistList";
 export function AppWithRedux() {
 
     const status = useAppSelector<RequestStatusType>(state => state.app.status)
-    const isLoginIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
     const todoList = useAppSelector<TodolistDomainType[]>(state => state.todolists)
     const tasks = useAppSelector<TaskStateType>(state => state.tasks)
+    const isInitialised = useAppSelector<boolean>(state => state.app.isInitialised)
+    const dispatch = useDispatch()
+
+    useEffect(()=> {
+        dispatch(initializeAppTC)
+    }, [])
+
+    if (!isInitialised) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
 
 
     return (
@@ -29,7 +41,7 @@ export function AppWithRedux() {
             <Container fixed>
 
                 <Routes>
-                    <Route path='/' element={<TodolistList todolist={todoList} tasks={tasks} isLoginIn={isLoginIn}/>}/>
+                    <Route path='/' element={<TodolistList todolist={todoList} tasks={tasks}/>}/>
                     <Route path='Login' element={<Login/>}/>
                     <Route path='404' element={<main style={{ padding: '1rem'}}>
                         <p>There's nothing here!</p>

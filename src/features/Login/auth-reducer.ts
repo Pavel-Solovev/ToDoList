@@ -1,9 +1,14 @@
-import { Dispatch } from 'redux'
-import { setAppErrorACType, setAppStatusAC, setAppStatusACType } from '../../app/app-reducer'
+import {Dispatch} from 'redux'
+import {
+    setAppErrorACType,
+    setAppStatusAC,
+    setAppStatusACType,
+    setIsInitialisedACType
+} from '../../app/app-reducer'
 import {authAPI, LoginParamsType} from "../../api/todolist-api";
-import {addTaskAC} from "../TodolistList/task-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../helpers/error-helper";
 import {AxiosError} from "axios";
+import {clearTodoAC} from "../TodolistList/todolists-reducer";
 
 const initialState = {
     isLoggedIn: false
@@ -26,17 +31,42 @@ export const setIsLoggedInAC = (value: boolean) =>
 export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC('loading'))
     authAPI.login(data)
-        .then((res)=>{
+        .then((res) => {
             if (res.data.resultCode === 0) {
                 dispatch(setIsLoggedInAC(true))
                 dispatch(setAppStatusAC('succeeded'))
-                } else {
+            } else {
                 handleServerAppError(dispatch, res.data)
-            }})
-        .catch((err: AxiosError) => {
-                handleServerNetworkError(dispatch, err.message)
+            }
         })
+        .catch((err: AxiosError) => {
+            handleServerNetworkError(dispatch, err.message)
+        })
+
+}
+
+export const logoutTC = () => (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setAppStatusAC('loading'))
+    authAPI.logout()
+        .then((res) => {
+            if (res.data.resultCode === 0) {
+                dispatch(setIsLoggedInAC(false))
+                dispatch(setAppStatusAC('succeeded'))
+                dispatch(clearTodoAC())
+            } else {
+                handleServerAppError(dispatch, res.data)
+            }
+        })
+        .catch((err: AxiosError) => {
+            handleServerNetworkError(dispatch, err.message)
+        })
+
 }
 
 // types
-type ActionsType = ReturnType<typeof setIsLoggedInAC> | setAppStatusACType | setAppErrorACType
+type ActionsType =
+    | ReturnType<typeof setIsLoggedInAC>
+    | ReturnType<typeof clearTodoAC>
+    | setAppStatusACType
+    | setAppErrorACType
+    | setIsInitialisedACType

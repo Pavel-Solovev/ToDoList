@@ -3,6 +3,8 @@ import {Dispatch} from "redux";
 import {AppActionType, RequestStatusType, setAppStatusAC} from "../../app/app-reducer";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../helpers/error-helper";
+import {fetchTaskThunkC} from "./task-reducer";
+import {AppThunk} from "../../app/store";
 
 
 export const initState: TodolistDomainType[] = []
@@ -23,6 +25,8 @@ export const todolistsReducer = (state: TodolistDomainType[] = initState, action
             })
         case "CHANGE-TODO-ENTITY-STATUS":
             return state.map(e => e.id === action.payload.id ? {...e, entityStatus: action.payload.entityStatus} : e)
+        case "CLEAR-TODO":
+            return []
         default:
             return state
     }
@@ -87,14 +91,23 @@ export const changeTodoEntityStatusAC = (id: string, entityStatus: RequestStatus
     } as const
 }
 
+export const clearTodoAC = () => ({type: 'CLEAR-TODO'} as const)
+
 // Thunk
 
-export const fetchTodolistThunkC = () => (dispatch: Dispatch<todoReducerACType>) => {
+export const fetchTodolistThunkC = (): AppThunk =>
+    (dispatch) => {
     dispatch(setAppStatusAC('loading'))
     TodolistApi.getTodos()
         .then((res) => {
             dispatch(setTodosAC(res.data))
             dispatch(setAppStatusAC('succeeded'))
+            return res.data
+        })
+        .then((todos)=>{
+            todos.forEach((tl)=>{
+                dispatch(fetchTaskThunkC(tl.id))
+            })
         })
         .catch((err: AxiosError) => {
             handleServerNetworkError(dispatch, err.message)
@@ -166,6 +179,7 @@ export type todoReducerACType =
     | ReturnType<typeof changeTodolistFilterAC>
     | ReturnType<typeof setTodosAC>
     | ReturnType<typeof changeTodoEntityStatusAC>
+    | ReturnType<typeof clearTodoAC>
     | AppActionType
 export type FilterValuesType = "All" | "Active" | "Completed";
 export type TodolistDomainType = TodolistApiType & {

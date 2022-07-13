@@ -14,6 +14,7 @@ import {addTaskThunkC, fetchTaskThunkC, TaskStateType} from "./task-reducer";
 type PropsType = {
     todolist: TodolistDomainType
     tasks: TaskStateType
+    isLoginIn:boolean
 }
 
 export const Todolist1 = React.memo((props: PropsType) => {
@@ -26,9 +27,9 @@ export const Todolist1 = React.memo((props: PropsType) => {
     }
 
     const dispatch = useDispatch()
-    useEffect(()=>{
-        dispatch(fetchTaskThunkC(props.todolist.id))
-    },[])
+    // useEffect(()=>{
+    //     dispatch(fetchTaskThunkC(props.todolist.id))
+    // },[dispatch])
 
     const onFilterClickHandler = useCallback((todolistId: string, value: FilterValuesType) =>
         dispatch(changeTodolistFilterAC(todolistId, value)), [dispatch]);

@@ -1,5 +1,5 @@
 import {
-    AddTodolistAC,
+    AddTodolistAC, clearTodoAC,
     RemoveTodoListAC,
     setTodosAC,
 } from "./todolists-reducer";
@@ -58,6 +58,8 @@ export const taskReducer = (state = initState, action: taskReducerACType): TaskS
         }
         case "SET-TASKS":
             return {...state, [action.payload.todolistId]: action.payload.tasks}
+        case "CLEAR-TODO":
+            return {}
         default:
             return state
     }
@@ -231,4 +233,5 @@ export type taskReducerACType =
     | ReturnType<typeof AddTodolistAC>
     | ReturnType<typeof RemoveTodoListAC>
     | ReturnType<typeof setTodosAC>
+    | ReturnType<typeof clearTodoAC>
     | AppActionType

@@ -43,7 +43,13 @@ export const TodolistApi = {
 export const authAPI = {
     login(data: LoginParamsType) {
         return instance.post<LoginParamsType, AxiosResponse<CommonResponseType<{ userId: number }>>>('/auth/login', data)
-    }
+    },
+    me() {
+        return instance.get<CommonResponseType<MeResponseType>>('auth/me')
+    },
+    logout() {
+        return instance.delete<CommonResponseType>('/auth/login')
+    },
 }
 
 export enum LoginStatuses {
@@ -57,6 +63,12 @@ export type LoginParamsType = {
     password:string
     rememberMe?:boolean
     captcha?:string
+}
+
+export type MeResponseType = {
+    id: number
+    email:string
+    login:string
 }
 
 // export type LoginParamsType = {
