@@ -55,6 +55,7 @@ export const Todolist1 = React.memo((props: PropsType) => {
             todolist={props.todolist}
             tasks={tasksForTodolist}
         />
+
         <div>
             <UniButton name={'All'} typeButton={props.todolist.filter === 'All' ? "contained" : "outlined"}
                        callBackHandler={() => onFilterClickHandler(props.todolist.id, 'All')} classButton={'filter'}/>
